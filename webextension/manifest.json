@@ -1,0 +1,29 @@
+{
+    "name": "DiMe browser extension",
+    "author": "University of Helsinki, Mats Sjöberg <mats.sjoberg@helsinki.fi>",
+    "version": "0.1",
+    "description": "Logs your browsing history to DiMe",
+    "homepage_url": "https://github.com/HIIT/dime-loggers",
+    "manifest_version": 2,
+
+    "applications": {
+        "gecko": {
+            "id": "dime-browser-extension@hiit.fi"
+        }
+    },
+
+    "permissions": [
+        "<all_urls>"
+    ],
+
+    "background": {
+        "scripts": ["background.js"]
+    },
+
+    "content_scripts": [
+        {
+            "matches": ["<all_urls>"],
+            "js": ["content-script.js"]
+        }
+    ]
+}
