@@ -6,6 +6,12 @@
     "homepage_url": "https://github.com/HIIT/dime-loggers",
     "manifest_version": 2,
 
+    "applications": {
+        "gecko": {
+            "id": "dime-browser-extension@hiit.fi"
+        }
+    },
+
     "permissions": [
         "<all_urls>"
     ],
