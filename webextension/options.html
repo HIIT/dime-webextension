@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>DiMe Browser Extension Options</title>
+  <style>
+    body: { padding: 10px; }
+  </style>
+</head>
+
+<body>
+  <p>
+    <label for="api_url">DiMe API URL:</label>
+    <input type="text" placeholder="http://localhost:8080/api" id="api_url" />
+  </p>
+
+  <p>
+    <label for="username">Username:</label>
+    <input type="text" placeholder="username" id="username" />
+  </p>
+
+  <p>
+    <label for="password">Password:</label>
+    <input type="password" placeholder="password" id="password" />
+  </p>
+  
+  <p>
+    <div id="status"></div>
+    <button id="save">Save</button>
+  </p>
+
+  <script src="options.js"></script>
+</body>
+</html>
