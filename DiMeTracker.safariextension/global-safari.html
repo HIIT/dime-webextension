@@ -1,0 +1,75 @@
+<!DOCTYPE HTML>
+<script>
+// Register for the page loaded event (used as end script)
+safari.application.addEventListener("message", handleMessage, false);
+var excludedHostnames = ["talkgadget.google.com", "hangouts.google.com"];
+
+var logToDiMe = function(url, title, plainTextContent) {
+    console.log("Logging to DiMe: " + url + " - \"" + title + "\"");
+    var data = JSON.stringify({
+        '@type': "DesktopEvent",
+        type: "http://www.semanticdesktop.org/ontologies/2010/01/25/nuao#UsageEvent",
+        actor: "DiMe Safari browser extension",
+        start: Date.now(),
+        targettedResource: {
+            '@type': "Document",
+            isStoredAs: "http://www.semanticdesktop.org/ontologies/2007/03/22/nfo#RemoteDataObject",
+            mimeType: "text/html", 
+            plainTextContent: plainTextContent,
+            type: "http://www.semanticdesktop.org/ontologies/2007/03/22/nfo#Document", 
+            uri: url, 
+            title: title, 
+            plainTextContent: plainTextContent
+        }
+    });
+    var req = new XMLHttpRequest();
+    req.addEventListener("load", function() {
+        if (this.status >= 400)
+            console.log("Error: " + this.statusText);
+    })
+
+    // Note: username here is not actually used but is a placeholder. Actual username comes from keychain.
+    var username = safari.extension.settings.username;
+    var password = safari.extension.settings.password;
+    var apiUrl = safari.extension.settings.apiUrl
+    
+    req.open("POST", apiUrl + "/data/event");
+    req.setRequestHeader("Content-type", "application/json");
+    req.setRequestHeader("Authorization", "Basic " + 
+                         btoa(username + ":" + password));
+    req.send(data);
+}
+
+function handleMessage(event)
+{
+    // Check that name of event matches pageLoaded, which is what is sent from injected script
+    if (event.name !== "pageLoaded")
+        return;
+
+    url = new URL(event.message.uri);
+
+    // Skip if we are in private browsing mode
+    if (safari.application.activeBrowserWindow.activeTab.private)
+        return;
+
+    // Skip hits to topsites
+    if (url.protocol.indexOf("topsites") == 0)
+        return;
+
+    // Skip excluded host names
+    for (i in excludedHostnames) {
+        if (url.hostname.endsWith(excludedHostnames[i]))
+            return;
+    }
+
+    // Extra check is necessary because initial (default) setting might be a string saying "false"
+    // which is not the same as false
+    var trackLocalhost = safari.extension.settings.trackLocalhost == true
+
+    // if url contains localhost, only send if we want to track localhost
+    if (!(url.hostname.indexOf("localhost") !== -1) || trackLocalhost) {
+        logToDiMe(event.message.uri, event.message.title, event.message.text);
+    }
+
+}
+</script>
