@@ -47,6 +47,24 @@ function handleMessage(event)
         return;
 
     url = new URL(event.message.uri);
+    apiUrl = new URL(safari.extension.settings.apiUrl);
+
+    // Extra check is necessary because initial (default) setting might be a string saying "false"
+    // which is not the same as false
+    var trackApiUrl = safari.extension.settings.trackApiUrl == true
+
+    // Skip if we are logging the same url as dime's url and the relative option is not set
+    if (url.hostname.indexOf(apiUrl.hostname) !== -1 && !trackApiUrl)
+        return;
+
+    // Extra check is necessary because initial (default) setting might be a string saying "false"
+    // which is not the same as false
+    var trackLocalhost = safari.extension.settings.trackLocalhost == true
+
+    // if url contains localhost, only send if we want to track localhost
+    if (url.hostname.indexOf("localhost") !== -1 && !trackLocalhost) {
+        return;
+    }
 
     // Skip if we are in private browsing mode
     if (safari.application.activeBrowserWindow.activeTab.private)
@@ -56,20 +74,18 @@ function handleMessage(event)
     if (url.protocol.indexOf("topsites") == 0)
         return;
 
+    // Skip hits to favorites
+    if (url.protocol.indexOf("favorites") == 0)
+        return;
+
     // Skip excluded host names
     for (i in excludedHostnames) {
         if (url.hostname.endsWith(excludedHostnames[i]))
             return;
     }
 
-    // Extra check is necessary because initial (default) setting might be a string saying "false"
-    // which is not the same as false
-    var trackLocalhost = safari.extension.settings.trackLocalhost == true
-
-    // if url contains localhost, only send if we want to track localhost
-    if (!(url.hostname.indexOf("localhost") !== -1) || trackLocalhost) {
-        logToDiMe(event.message.uri, event.message.title, event.message.text);
-    }
+    // If we managed to get here, send to dime
+    logToDiMe(event.message.uri, event.message.title, event.message.text);
 
 }
 </script>
