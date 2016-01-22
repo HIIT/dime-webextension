@@ -49,17 +49,15 @@ function handleMessage(event)
     url = new URL(event.message.uri);
     apiUrl = new URL(safari.extension.settings.apiUrl);
 
-    // Extra check is necessary because initial (default) setting might be a string saying "false"
-    // which is not the same as false
-    var trackApiUrl = safari.extension.settings.trackApiUrl == true
+    // Extra check is necessary because initial (default) settings are strings, but when modified are bool
+    var trackApiUrl = xToBool(safari.extension.settings.trackApiUrl)
 
     // Skip if we are logging the same url as dime's url and the relative option is not set
     if (url.hostname.indexOf(apiUrl.hostname) !== -1 && !trackApiUrl)
         return;
 
-    // Extra check is necessary because initial (default) setting might be a string saying "false"
-    // which is not the same as false
-    var trackLocalhost = safari.extension.settings.trackLocalhost == true
+    // Extra check is necessary because initial (default) settings are strings, but when modified are bool
+    var trackLocalhost = xToBool(safari.extension.settings.trackLocalhost)
 
     // if url contains localhost, only send if we want to track localhost
     if (url.hostname.indexOf("localhost") !== -1 && !trackLocalhost) {
@@ -88,4 +86,9 @@ function handleMessage(event)
     logToDiMe(event.message.uri, event.message.title, event.message.text);
 
 }
+
+function xToBool(x) {
+    return x == true || String(x).toLowerCase() == "true"
+}
+
 </script>
