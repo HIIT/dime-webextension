@@ -9,13 +9,13 @@
 	<key>CFBundleDisplayName</key>
 	<string>DiMeTracker</string>
 	<key>CFBundleIdentifier</key>
-	<string>HIIT.dimetracker</string>
+	<string>fi.hiit.dimetracker</string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleShortVersionString</key>
-	<string>0.1</string>
+	<string>0.2</string>
 	<key>CFBundleVersion</key>
-	<string>1</string>
+	<string>0.2</string>
 	<key>Chrome</key>
 	<dict>
 		<key>Database Quota</key>
@@ -36,7 +36,7 @@
 	<key>Description</key>
 	<string>DiMe Tracker for Safari</string>
 	<key>DeveloperIdentifier</key>
-	<string>0000000000</string>
+	<string>JYV3R5X7JQ</string>
 	<key>ExtensionInfoDictionaryVersion</key>
 	<string>1.0</string>
 	<key>Permissions</key>
@@ -49,5 +49,9 @@
 			<string>All</string>
 		</dict>
 	</dict>
+	<key>Update Manifest URL</key>
+	<string>http://www.hiit.fi/g/reknow/software/DiMeTrackerExtension.plist</string>
+	<key>Website</key>
+	<string>http://hiit.github.io/dime-server</string>
 </dict>
 </plist>
