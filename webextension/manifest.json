@@ -3,7 +3,7 @@
     "author": "University of Helsinki, Mats Sjöberg <mats.sjoberg@helsinki.fi>",
     "version": "0.1",
     "description": "Logs your browsing history to DiMe",
-    "homepage_url": "https://github.com/HIIT/dime-loggers",
+    "homepage_url": "https://github.com/HIIT/dime-webextension",
     "manifest_version": 2,
 
     "permissions": [
@@ -12,7 +12,10 @@
     ],
 
     "background": {
-        "scripts": ["background.js"]
+        "scripts": [
+            "common.js",
+            "background.js"
+        ]
     },
 
     "content_scripts": [
