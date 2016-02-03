@@ -9,15 +9,15 @@ var logToDiMe = function(url, title, plainTextContent) {
     console.log("Logging to DiMe: " + url + " - \"" + title + "\"");
     var data = JSON.stringify({
         '@type': "DesktopEvent",
-        type: "http://www.semanticdesktop.org/ontologies/2010/01/25/nuao#UsageEvent",
+        type: "http://www.semanticdesktop.org/ontologies/2010/01/25/nuao/#UsageEvent",
         actor: "DiMe Safari browser extension",
         start: Date.now(),
         targettedResource: {
             '@type': "Document",
-            isStoredAs: "http://www.semanticdesktop.org/ontologies/2007/03/22/nfo#RemoteDataObject",
+            isStoredAs: "http://www.semanticdesktop.org/ontologies/2007/03/22/nfo/#RemoteDataObject",
             mimeType: "text/html", 
             plainTextContent: plainTextContent,
-            type: "http://www.semanticdesktop.org/ontologies/2007/03/22/nfo#Document", 
+            type: "http://www.semanticdesktop.org/ontologies/2007/03/22/nfo/#HtmlDocument", 
             uri: url, 
             title: title, 
             plainTextContent: plainTextContent
