@@ -29,7 +29,7 @@ var saveOptions = function() {
   var password = document.getElementById('password').value;
   var skipSites = document.getElementById('skip_sites').value;
     
-  updateSkipSites(skipSites);
+  updateSkipSites(skipSites, apiUrl);
   document.getElementById('skip_sites').value = settings.skipSites;
 
   chrome.storage.local.set({

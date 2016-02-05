@@ -52,10 +52,11 @@ var domainFromUrl = function(url) {
 }
 
 // Update the internal skipSites list from the text field in settings
-var updateSkipSites = function(skipSitesText) {
+var updateSkipSites = function(skipSitesText, apiUrl) {
     skipSites = [];
+    var apiUrl = typeof apiUrl !== 'undefined' ?  apiUrl : settings.apiUrl;
 
-    apiDomain = domainFromUrl(settings.apiUrl);
+    apiDomain = domainFromUrl(apiUrl);
     var addApi = apiDomain !== '';
 
     for (var line of skipSitesText.split('\n')) {
@@ -72,7 +73,7 @@ var updateSkipSites = function(skipSitesText) {
     if (addApi)
         skipSites.push(apiDomain);
 
-    console.log(skipSites);
+    // console.log("skipSites="+ skipSites);
 
     return skipSites;
 }
