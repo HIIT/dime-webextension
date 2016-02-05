@@ -5,6 +5,15 @@
 safari.application.addEventListener("message", handleMessage, false);
 var excludedHostnames = ["talkgadget.google.com", "hangouts.google.com"];
 
+var currentEventName = ""
+
+// Every minute, ask the companion what is the current event name (it will then send a message)
+setInterval(function() {
+    if (safari.extension.companion !== null) {
+        safari.extension.companion.dispatchMessage("event_name_fetch", "");
+    }
+}, 60 * 1000);
+
 var logToDiMe = function(url, title, plainTextContent) {
     console.log("Logging to DiMe: " + url + " - \"" + title + "\"");
     var data = JSON.stringify({
@@ -44,9 +53,18 @@ var logToDiMe = function(url, title, plainTextContent) {
 function handleMessage(event)
 {
     // Check that name of event matches pageLoaded, which is what is sent from injected script
-    if (event.name !== "pageLoaded")
-        return;
+    // if, so call its handler
+    if (event.name === "pageLoaded") {
+        handlePageLoadedMessage(event);
+    // otherwise check if this is an event name coming from the extension companion
+    } else if (event.target instanceof SafariExtensionCompanion) {
+        if (event.name === "current-event-name")
+            currentEventName = event.message;
+    }
+}
 
+function handlePageLoadedMessage(event)
+{
     url = new URL(event.message.uri);
     apiUrl = new URL(safari.extension.settings.apiUrl);
 
@@ -85,7 +103,6 @@ function handleMessage(event)
 
     // If we managed to get here, send to dime
     logToDiMe(event.message.uri, event.message.title, event.message.text);
-
 }
 
 function xToBool(x) {

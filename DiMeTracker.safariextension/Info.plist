@@ -23,6 +23,10 @@
 		<key>Global Page</key>
 		<string>global-safari.html</string>
 	</dict>
+	<key>Companion Bundle Identifier</key>
+	<array>
+		<string>fi.hiit.JustUsedCompanion</string>
+	</array>
 	<key>Content</key>
 	<dict>
 		<key>Scripts</key>
