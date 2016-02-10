@@ -3,31 +3,8 @@
 <script>
 // Register for the page loaded event (used as end script)
 safari.application.addEventListener("message", handleMessage, false);
+
 var excludedHostnames = ["talkgadget.google.com", "hangouts.google.com"];
-
-var currentEventName = ""
-
-safari.application.addEventListener("open", openHandler, true);
-safari.application.addEventListener("close", closeHandler, true);
- 
-function openHandler(event)
-{
-    if (!(event.target instanceof SafariExtensionCompanion))
-        return;
-}
- 
-function closeHandler(event)
-{
-    if (!(event.target instanceof SafariExtensionCompanion))
-        return;
-}
-
-// Every minute, ask the companion what is the current event name (it will then send a message)
-setInterval(function() {
-    if (safari.extension.companion !== null) {
-        safari.extension.companion.dispatchMessage("event_name_fetch", "");
-    }
-}, 5 * 1000);
 
 var logToDiMe = function(url, title, plainTextContent) {
     console.log("Logging to DiMe: " + url + " - \"" + title + "\"");
@@ -71,10 +48,6 @@ function handleMessage(event)
     // if, so call its handler
     if (event.name === "pageLoaded") {
         handlePageLoadedMessage(event);
-    // otherwise check if this is an event name coming from the extension companion
-    } else if (event.target instanceof SafariExtensionCompanion) {
-        if (event.name === "current-event-name")
-            currentEventName = event.message;
     }
 }
 
