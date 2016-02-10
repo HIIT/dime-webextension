@@ -25,7 +25,7 @@
 	</dict>
 	<key>Companion Bundle Identifier</key>
 	<array>
-		<string>fi.hiit.JustUsed.fi-hiit-JustUsedCompanion</string>
+		<string>fi.aalto.org.JustUsedCompanion</string>
 	</array>
 	<key>Content</key>
 	<dict>
