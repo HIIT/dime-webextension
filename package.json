@@ -46,7 +46,6 @@
     "ineed": "^1.0.4",
     "jquery": "^2.2.3",
     "stopwords": "0.0.5",
-    "text-miner": "^1.0.5",
     "tokenize-text": "^1.1.3",
     "underscore": "^1.8.3"
   }

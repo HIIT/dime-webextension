@@ -1,4 +1,3 @@
-import textMiner from 'text-miner'
 import Tokenizer from 'tokenize-text'
 import stopWords from 'stopwords'
 const tokenize = new Tokenizer();
