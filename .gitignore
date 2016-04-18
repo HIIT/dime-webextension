@@ -1,3 +1,7 @@
 *~
 /webextension.pem
 /webextension.crx
+node_modules/*
+build/*
+npm-debug.log
+.idea/*
