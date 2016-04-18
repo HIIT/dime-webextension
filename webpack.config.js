@@ -4,6 +4,7 @@ module.exports = {
     'dime.content': './src/chrome/dime.content.js',
     'dime.logger': './src/chrome/dime.logger.js',
     'dime.background': './src/chrome/dime.background.js',
+    'dime.options': './src/chrome/dime.options.js',
     'RankTermsWebWorker': './src/chrome/RankTermsWebWorker.js',
   },
   output: {
@@ -42,13 +43,13 @@ module.exports = {
         to: 'manifest.json' //+output.path
       },
       {
-        from: './src/chrome/options.html',
-        to: 'options.html' //+output.path
+        from: './src/chrome/dime.options.html',
+        to: 'dime.options.html' //+output.path
       },
       {
         from: 'src/chrome/icons/',
         to: 'icons/' //+output.path
-      },
+      }
     ], {
       ignore: [],
       copyUnmodified: true
