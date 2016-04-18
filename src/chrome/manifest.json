@@ -30,7 +30,7 @@
     "256": "icons/icon256.png"
   },
   "options_ui": {
-    "page": "options.html",
+    "page": "dime.options.html",
     "chrome_style": true
   },
   "browser_action": {
@@ -48,7 +48,9 @@
     }
   ],
   "background": {
-      "scripts": ["dime.background.js"],
+      "scripts": [
+        "dime.background.js"
+      ],
       "persistent": true
   },
   "web_accessible_resources": [
