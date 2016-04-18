@@ -1,0 +1,53 @@
+{
+  "name": "dime-webextension",
+  "version": "0.0.1",
+  "description": "web extensions for different browsers",
+  "main": "none",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "webpack --config webpack.config.js --watch"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/HIIT/dime-webextension.git"
+  },
+  "babel": {
+    "presets": [
+      "react",
+      "es2015",
+      "stage-3"
+    ],
+    "plugins": [
+      "transform-runtime"
+    ]
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/HIIT/dime-webextension/issues"
+  },
+  "homepage": "https://github.com/HIIT/dime-webextension#readme",
+  "devDependencies": {
+    "babel-cli": "^6.6.5",
+    "babel-core": "^6.2.1",
+    "babel-loader": "^6.2.0",
+    "babel-plugin-transform-runtime": "^6.7.5",
+    "babel-preset-es2015": "^6.1.18",
+    "babel-preset-react": "^6.1.18",
+    "babel-preset-stage-3": "^6.5.0",
+    "babel-runtime": "^6.6.1",
+    "copy-webpack-plugin": "^2.1.1",
+    "html-loader": "^0.4.3",
+    "json-loader": "^0.5.4",
+    "markdown-loader": "^0.1.7",
+    "webpack": "^1.12.9"
+  },
+  "dependencies": {
+    "ineed": "^1.0.4",
+    "jquery": "^2.2.3",
+    "stopwords": "0.0.5",
+    "text-miner": "^1.0.5",
+    "tokenize-text": "^1.1.3",
+    "underscore": "^1.8.3"
+  }
+}
