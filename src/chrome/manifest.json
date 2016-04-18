@@ -1,0 +1,60 @@
+{
+  "name": "DiMe Browser Extension for Chrome",
+  "author": "University of Helsinki, Mats Sjöberg <mats.sjoberg@helsinki.fi>",
+  "manifest_version": 2,
+  "description": "Logs your browsing history to DiMe",
+  "homepage_url": "https://github.com/HIIT/dime-webextension",
+  "version": "0.1.1",
+  "permissions": [
+    "<all_urls>",
+    "background",
+    "webRequest",
+    "webRequestBlocking",
+    "tabs",
+    "http://*/*",
+    "https://*/*",
+    "history",
+    "contextMenus",
+    "storage",
+    "unlimitedStorage",
+    "identity",
+    "sessions",
+    "downloads",
+    "idle",
+    "webNavigation"
+  ],
+  "icons": {
+    "16": "icons/icon16.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  },
+  "options_ui": {
+    "page": "options.html",
+    "chrome_style": true
+  },
+  "browser_action": {
+    "default_title": "dime",
+    "default_icon": {
+      "19": "icons/icon19.png",
+      "38": "icons/icon38.png"
+    }
+  },
+  "content_scripts": [
+    {
+      "matches": ["http://*/*", "https://*/*"],
+      "js": ["dime.content.js"],
+      "run_at": "document_end"
+    }
+  ],
+  "background": {
+      "scripts": ["dime.background.js"],
+      "persistent": true
+  },
+  "web_accessible_resources": [
+    "dime.content.js",
+    "dime.logger.js",
+    "RankTermsWebWorker.js"
+  ],
+  "content_security_policy": "default-src 'self';",
+  "minimum_chrome_version": "33"
+}
