@@ -27,7 +27,8 @@ export const settings = {
     apiUrl: 'http://localhost:8080/api',
     username: 'testuser',
     password: 'testuser123',
-    skipSites: ''
+    skipSites: [],
+    enable: true
 }
 
 export var skipSites = [];

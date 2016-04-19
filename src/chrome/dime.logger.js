@@ -55,8 +55,8 @@ window.addEventListener('message', function(event) {
         //    pageXHR = []
         //}, 3000);
         const pageURL = event.data.message
+        const pageTexts = ineed.collect.texts.fromHtml(document.body.parentNode.innerHTML).texts
         function getFrequentTerms () {
-            let pageTexts = ineed.collect.texts.fromHtml(document.body.parentNode.innerHTML).texts
             return new Promise ((resolve, reject) => {
                 const id = Math.random().toString(36).substr(2, 5)
                 window.postMessage({
@@ -115,17 +115,24 @@ window.addEventListener('message', function(event) {
                 }).toArray())
             })
         }
-        async function send() {
+        async function compile() {
             let pageData = {}
+            pageData.pageTexts = pageTexts
+            pageData.pageURL = pageURL
             pageData.frequentTerms = await getFrequentTerms()
             pageData.imageURLs = await getImageURLs();
             pageData.hyperlinks = await getHyperlinks();
             pageData.title = await getTitle();
             pageData.openGraphProtocol = await getOpenGraphProtocol();
             pageData.metaTags = await getMetaTags();
-            console.log(pageData)
+            console.log('page parsing is done.')
+            return pageData
         }
-        console.log('sending...')
-        send()
+        compile().then((pageData)=>{
+            window.postMessage({
+                type: 'compiledResult',
+                pageData: pageData
+            }, '*');
+        })
     }
 });

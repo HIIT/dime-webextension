@@ -58,6 +58,5 @@
     "dime.logger.js",
     "RankTermsWebWorker.js"
   ],
-  "content_security_policy": "default-src 'self';",
   "minimum_chrome_version": "33"
 }
