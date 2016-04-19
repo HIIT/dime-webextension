@@ -33,28 +33,31 @@ import {settings} from './dime.common'
             if (typeof(enable) === "boolean")
                 if (enable)
                     chrome.browserAction.setIcon(
-                        {path: {'19': 'icons/icon19.png',
-                            '38': 'icons/icon38.png'}});
+                        {path: {'19': 'icon19.png',
+                            '38': 'icon38.png'}});
                 else
                     chrome.browserAction.setIcon(
-                        {path: {'19': 'icons/icon19-disabled.png',
-                            '38': 'icons/icon38-disabled.png'}});
+                        {path: {'19': 'icon19-disabled.png',
+                            '38': 'icon38-disabled.png'}});
         })
     }
     function checkDiMeAlive () {
         return new Promise((resolve, reject) => {
             chrome.storage.local.get(['apiUrl'], (items)=> {
                 let {apiUrl} = items
-                var req = new XMLHttpRequest();
-                req.open("GET", apiUrl + "/ping", true)
-                req.onreadystatechange = function() {
-                    if (req.status == 200) {
-                        resolve(req)
-                    } else {
-                        reject(req)
+                if (apiUrl) {
+                    var req = new XMLHttpRequest()
+                    req.open("GET", apiUrl + "/ping", true)
+                    req.onreadystatechange = function() {
+                        if (req.status == 200) {
+                            resolve(req)
+                        } else {
+                            reject(req)
+                        }
                     }
+                    req.send()
                 }
-                req.send()
+
             })
         })
 
@@ -80,8 +83,8 @@ import {settings} from './dime.common'
             console.log(`connection with dime at ${items.apiUrl} error` )
             console.log(req)
             chrome.browserAction.setIcon(
-                {path: {'19': 'icons/icon19-disconnected.png',
-                    '38': 'icons/icon38-disconnected.png'}})
+                {path: {'19': 'icon19-disconnected.png',
+                    '38': 'icon38-disconnected.png'}})
         })
         chrome.storage.local.set({disconnected: true})
     })
@@ -112,8 +115,8 @@ import {settings} from './dime.common'
                     console.log(`connection with dime at ${items.apiUrl} error` )
                     console.log(req)
                     chrome.browserAction.setIcon(
-                        {path: {'19': 'icons/icon19-disconnected.png',
-                            '38': 'icons/icon38-disconnected.png'}})
+                        {path: {'19': 'icon19-disconnected.png',
+                            '38': 'icon38-disconnected.png'}})
                 })
                 chrome.storage.local.set({disconnected: true})
             })
