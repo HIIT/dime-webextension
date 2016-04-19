@@ -5,21 +5,12 @@
   "main": "none",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "webpack --config webpack.config.js --watch"
+    "start": "webpack --config webpack.config.js --watch",
+    "build": "webpack --config webpack.config.js && gulp"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/HIIT/dime-webextension.git"
-  },
-  "babel": {
-    "presets": [
-      "react",
-      "es2015",
-      "stage-3"
-    ],
-    "plugins": [
-      "transform-runtime"
-    ]
   },
   "author": "",
   "license": "ISC",
@@ -37,10 +28,14 @@
     "babel-preset-stage-3": "^6.5.0",
     "babel-runtime": "^6.6.1",
     "copy-webpack-plugin": "^2.1.1",
+    "gulp": "^3.9.1",
+    "gulp-crx-pack": "^1.0.1",
     "html-loader": "^0.4.3",
     "json-loader": "^0.5.4",
     "markdown-loader": "^0.1.7",
-    "webpack": "^1.12.9"
+    "run-sequence": "^1.1.5",
+    "webpack": "^1.12.9",
+    "webpack-stream": "^3.1.0"
   },
   "dependencies": {
     "ineed": "^1.0.4",

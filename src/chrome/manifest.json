@@ -14,20 +14,15 @@
     "http://*/*",
     "https://*/*",
     "history",
-    "contextMenus",
     "storage",
     "unlimitedStorage",
-    "identity",
-    "sessions",
-    "downloads",
-    "idle",
     "webNavigation"
   ],
   "icons": {
-    "16": "icons/icon16.png",
-    "48": "icons/icon48.png",
-    "128": "icons/icon128.png",
-    "256": "icons/icon256.png"
+    "16": "icon16.png",
+    "48": "icon48.png",
+    "128": "icon128.png",
+    "256": "icon256.png"
   },
   "options_ui": {
     "page": "dime.options.html",
@@ -36,8 +31,8 @@
   "browser_action": {
     "default_title": "dime",
     "default_icon": {
-      "19": "icons/icon19.png",
-      "38": "icons/icon38.png"
+      "19": "icon19.png",
+      "38": "icon38.png"
     }
   },
   "content_scripts": [
