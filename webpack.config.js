@@ -47,8 +47,7 @@ module.exports = {
         to: 'dime.options.html' //+output.path
       },
       {
-        from: 'src/chrome/icons/',
-        to: 'icons/' //+output.path
+        from: 'src/icons/'
       }
     ], {
       ignore: [],
