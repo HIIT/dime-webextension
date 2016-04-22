@@ -8,7 +8,7 @@
 * Archiving data when you are surfing the internet. The extension will send scraped data to dime-server. For example, if you visit [HIIT](http://www.hiit.fi), this [JSON](https://github.com/chenhunghan/dime-webextension/blob/master/src/resources/hiit.json) will be archived in your DiMe. The JSON contains:
     * the title of the page.
     * the url of the page.
-    * a list of HTML <meta> Tags from the page.
+    * a list of HTML Meta Tags from the page.
     * a list of Metadata defined by [Open Graph Protocol](http://ogp.me/).
     * a list of 5 DiMe tags, which are generated based on the frequency in the page.
     * a list of plain texts in the page.
