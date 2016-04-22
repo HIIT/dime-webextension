@@ -8,12 +8,15 @@
 * Archiving data when you are surfing the internet. The extension will send scraped data to dime-server. For example, if you visit [HIIT](http://www.hiit.fi), this [JSON](https://github.com/chenhunghan/dime-webextension/blob/master/src/resources/hiit.json) will be archived in your DiMe. The JSON contains:
     * the title of the page.
     * the url of the page.
-    * a list of 5 tags, which are generated based on the frequency in the page.
+    * a list of HTML <meta> Tags from the page.
+    * a list of Metadata defined by [Open Graph Protocol](http://ogp.me/).
+    * a list of 5 DiMe tags, which are generated based on the frequency in the page.
     * a list of plain texts in the page.
     * a list of 50 frequent terms in the page.
     * a list of hyperlinks in the page.
     * a list of image urls (the ``src`` of the image HTML tag) in the page.
-* A button on the bar to toggle the scraping and archiving.
+* A toggle on the bat to on/off the scraping and the archiving.
+* Change icons when DiMe is disconnected/active.
  
 ### Development of the DiMe Chrome Extension
 
