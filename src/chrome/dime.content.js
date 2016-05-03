@@ -1,4 +1,4 @@
-;(function(undefined) {
+
 
   function injectScript() {
     var script = document.createElement('script'),
@@ -94,5 +94,4 @@
       })
     else
       console.log('dime extension is disable by user, wont do anything.')
-  });
-}).call(this);
+  })
