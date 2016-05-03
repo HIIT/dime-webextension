@@ -16,6 +16,7 @@ module.exports = {
     tls: "empty",
     fs: "empty",
   },
+  devtool: 'source-map',
   module: {
     loaders: [
       {
@@ -47,7 +48,7 @@ module.exports = {
         to: 'dime.options.html' //+output.path
       },
       {
-        from: 'src/icons/'
+        from: 'src/icons'
       }
     ], {
       ignore: [],
