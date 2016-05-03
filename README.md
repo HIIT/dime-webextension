@@ -29,6 +29,9 @@
     * However, if you intent to edit ``./src/chrome/dime.background`` or ``./src/chrome/dime.content``, it is necessary to manually click ``Reload`` in ``chrome://extensions/``
     * In ``chrome://extensions/``, click ``Inspect views: background page`` to show the console messages and errors from ``./src/chrome/dime.background``
     * Console messages and errors in other js files will show in normal console in the tabs.
-7. To build the packed as ``.crx``, firstly generate your own .pem (see <https://developer.chrome.com/extensions/packaging> and place it in ``./src/certs/`` with the filename ``chrome.pem`` and ``npm run build``. The ``dime-chrome-extension-v*.crx`` should show up in ``./dist/chrome``
+
+### Build Chrome Extension
+1. To build the distributable Chrome extension (``.crx``), firstly generate your own .pem (see <https://developer.chrome.com/extensions/packaging> and place it in ``./src/certs/`` with the filename ``chrome.pem``
+2. ``npm run build``. The ``dime-chrome-extension-v[version number].crx`` will show up in ``./dist/chrome``
 
 
