@@ -40,8 +40,26 @@
   "dependencies": {
     "ineed": "^1.0.4",
     "jquery": "^2.2.3",
+    "lazy.js": "^0.4.2",
+    "leven": "^2.0.0",
+    "material-ui": "^0.15.0-beta.2",
+    "moment": "^2.11.2",
+    "react": "^15.0.2",
+    "react-dimensions": "^1.1.1",
+    "react-dom": "^15.0.2",
+    "react-list": "^0.7.18",
+    "react-motion": "^0.4.2",
+    "react-redux": "^4.4.5",
+    "react-router": "^2.3.0",
+    "react-router-redux": "^4.0.4",
+    "react-tap-event-plugin": "^1.0.0",
+    "redux": "^3.5.2",
+    "redux-form": "^4.2.0",
+    "redux-promise": "^0.5.3",
     "stopwords": "0.0.5",
+    "store": "^1.3.20",
     "tokenize-text": "^1.1.3",
+    "tsne-js": "^1.0.3",
     "underscore": "^1.8.3"
   }
 }
