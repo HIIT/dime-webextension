@@ -4,19 +4,10 @@
   "manifest_version": 2,
   "description": "Logs your browsing history to DiMe",
   "homepage_url": "https://github.com/HIIT/dime-webextension",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "permissions": [
     "<all_urls>",
-    "background",
-    "webRequest",
-    "webRequestBlocking",
-    "tabs",
-    "http://*/*",
-    "https://*/*",
-    "history",
-    "storage",
-    "unlimitedStorage",
-    "webNavigation"
+    "storage"
   ],
   "icons": {
     "16": "icon16.png",
@@ -42,12 +33,14 @@
       "run_at": "document_end"
     }
   ],
+
   "background": {
       "scripts": [
         "dime.background.js"
       ],
       "persistent": true
   },
+  "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'",
   "web_accessible_resources": [
     "dime.content.js",
     "dime.logger.js",
