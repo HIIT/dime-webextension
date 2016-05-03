@@ -1,33 +1,3 @@
-//import React from 'react'
-//import ReactDOM from 'react-dom'
-//import { Provider } from 'react-redux'
-//import { createStore, applyMiddleware } from 'redux'
-//import ReduxPromise from 'redux-promise'
-//import { Router, browserHistory} from 'react-router'
-//import { syncHistoryWithStore } from 'react-router-redux'
-//import { routerMiddleware } from 'react-router-redux'
-//
-//import reducers from './reducers'
-//import routes from './routes'
-//
-//const createStoreWithMiddleware = applyMiddleware(ReduxPromise)(createStore);
-//const middleware = routerMiddleware(browserHistory)
-//const store = createStoreWithMiddleware(
-//    reducers,
-//    applyMiddleware(middleware)
-//)
-//const history = syncHistoryWithStore(browserHistory, store)
-//
-//ReactDOM.render(
-//  <Provider store={store}>
-//    <Router history={history} routes={routes}/>
-//  </Provider>
-//  , document.querySelector('.reactRoot'));
-
-//import cheerio from 'cheerio'
-//console.log(cheerio)
-//
-//import artoo from '../artooPlusSniffer'
 import $ from 'jquery'
 import ineed from 'ineed'
 import _ from 'underscore'
@@ -46,8 +16,7 @@ window.postMessage({
 //        data: XHResponseData
 //    })
 //}
-window.addEventListener('message', function(event) {
-    //console.log(event.data)
+window.addEventListener('message', (event) => {
     if (event.data.type === 'fromContentScriptNotifyURLChanged') {
         //artoo.ajaxSniffer.after(sniffAllXHR);
         //setTimeout(() =>{
@@ -117,22 +86,53 @@ window.addEventListener('message', function(event) {
         }
         async function compile() {
             let pageData = {}
+            console.log('start parsing')
+            try {
+                pageData.frequentTerms = await getFrequentTerms()
+                pageData.imageURLs = await getImageURLs();
+                pageData.hyperlinks = await getHyperlinks();
+                pageData.title = await getTitle();
+                pageData.openGraphProtocol = await getOpenGraphProtocol();
+                pageData.metaTags = await getMetaTags();
+            } catch (error) {
+                console.log(error)
+            }
             pageData.pageTexts = pageTexts
             pageData.pageURL = pageURL
-            pageData.frequentTerms = await getFrequentTerms()
-            pageData.imageURLs = await getImageURLs();
-            pageData.hyperlinks = await getHyperlinks();
-            pageData.title = await getTitle();
-            pageData.openGraphProtocol = await getOpenGraphProtocol();
-            pageData.metaTags = await getMetaTags();
+
             console.log('page parsing is done.')
             return pageData
         }
         compile().then((pageData)=>{
-            window.postMessage({
-                type: 'compiledResult',
-                pageData: pageData
-            }, '*');
+            //window.postMessage({
+            //    type: 'compiledResult',
+            //    pageData: pageData
+            //}, '*');
+            injectUI(pageData)
         })
     }
-});
+})
+
+import React from 'react'
+import ReactDOM from 'react-dom'
+import { Provider } from 'react-redux'
+import { createStore, applyMiddleware } from 'redux'
+import ReduxPromise from 'redux-promise'
+
+import reducers from './UI/reducers'
+import App from './UI/app'
+
+function injectUI(pageData) {
+    let dimeUIRoot = document.createElement('div');
+    dimeUIRoot.setAttribute('class','dimeUIRoot');
+    document.body.appendChild(dimeUIRoot)
+    const createStoreWithMiddleware = applyMiddleware(ReduxPromise)(createStore);
+    const store = createStoreWithMiddleware(
+        reducers
+    )
+    ReactDOM.render(
+        <Provider store={store}>
+            <App pageData={pageData}/>
+        </Provider>
+        , document.querySelector('.dimeUIRoot'));
+}
