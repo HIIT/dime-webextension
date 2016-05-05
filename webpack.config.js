@@ -5,7 +5,6 @@ module.exports = {
     'dime.logger': './src/chrome/dime.logger.js',
     'dime.background': './src/chrome/dime.background.js',
     'dime.options': './src/chrome/dime.options.js',
-    'RankTermsWebWorker': './src/chrome/RankTermsWebWorker.js',
   },
   output: {
     path: __dirname + '/build/chrome',
@@ -16,7 +15,7 @@ module.exports = {
     tls: "empty",
     fs: "empty",
   },
-  devtool: 'source-map',
+  devtool: 'eval-cheap-module-source-map',
   module: {
     loaders: [
       {
