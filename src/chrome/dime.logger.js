@@ -1,6 +1,8 @@
 import $ from 'jquery'
 import ineed from 'ineed'
 import _ from 'underscore'
+import Tokenizer from 'tokenize-text'
+import stopWords from 'stopwords'
 
 window.postMessage({
     type: 'fromInjectedJStoHook',
@@ -25,21 +27,42 @@ window.addEventListener('message', (event) => {
         //}, 3000);
         const pageURL = event.data.message
         const pageTexts = ineed.collect.texts.fromHtml(document.body.parentNode.innerHTML).texts
+        function getFrequenentWords(wordsArray, cutOff) {
+            let frequencies = {}
+            for (let word of wordsArray) {
+                frequencies[word] = frequencies[word] || 0;
+                frequencies[word]++;
+            }
+            let words = Object.keys( frequencies );
+            return words.sort((a,b) => {
+                return frequencies[b] -frequencies[a];
+            }).slice(0,cutOff);
+        }
+        var timer = function(name) {
+            var start = new Date();
+            return {
+                stop: function() {
+                    var end  = new Date();
+                    var time = end.getTime() - start.getTime();
+                    console.log(name, 'finished in', time, 'ms');
+                }
+            }
+        };
         function getFrequentTerms () {
             return new Promise ((resolve, reject) => {
-                const id = Math.random().toString(36).substr(2, 5)
-                window.postMessage({
-                    type: 'pageTexts',
-                    text: JSON.stringify(pageTexts),
-                    id: id
-                }, '*');
-                console.log('page text send to worker')
-                window.addEventListener('message', (event) => {
-                    if (event.data.id === id && event.data.type === 'purifiedText') {
-                        console.log('received result from worker')
-                        resolve(event.data.termsRanked)
-                    }
-                })
+                const tokenize = new Tokenizer();
+                const englishReg = /^[A-Za-z]*$/;
+                const englishStopWords = stopWords.english
+                var timerTokenize = timer('tokenization');
+                let tokens = _.compact(_.flatten(pageTexts.map((content) => {
+                    return tokenize.words()(content.toString()).map((token) => {
+                        if (englishReg.test(token.value))
+                            return token.value.toLowerCase()
+                    })
+                })))
+                let terms = _.difference(tokens, englishStopWords);
+                timerTokenize.stop()
+                return resolve(getFrequenentWords(terms,50))
             })
         }
         function getImageURLs() {
@@ -126,10 +149,8 @@ function injectUI(pageData) {
     let dimeUIRoot = document.createElement('div');
     dimeUIRoot.setAttribute('class','dimeUIRoot');
     document.body.appendChild(dimeUIRoot)
-    const createStoreWithMiddleware = applyMiddleware(ReduxPromise)(createStore);
-    const store = createStoreWithMiddleware(
-        reducers
-    )
+    const store = createStore(reducers)
+
     ReactDOM.render(
         <Provider store={store}>
             <App pageData={pageData}/>
