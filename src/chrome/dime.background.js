@@ -96,12 +96,60 @@ chrome.browserAction.onClicked.addListener(() => {
 
 //detect URL changes
 chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
-    if(changeInfo && changeInfo.status == "complete"){
+    if(changeInfo){
         chrome.tabs.sendMessage(tabId, {data: tab})
     }
 });
 
+function unblockEvalinScrtipSrc () {
+    //modified from https://github.com/medialab/artoo/blob/master/chrome/background.js
+    chrome.webRequest.onHeadersReceived.addListener(
+        function(details) {
+            var possibleHeaders = [
+                'x-webkit-csp',
+                'content-security-policy'
+            ];
+            //if (localEnableVar)
+            //    return;
+            var i, l, o;
+            for (i = 0, l = details.responseHeaders.length; i < l; i++) {
+                o = details.responseHeaders[i];
+                if (~possibleHeaders.indexOf(o.name.toLowerCase()))
+                    o.value =
+                        "default-src *;" +
+                        "script-src * 'unsafe-inline' 'unsafe-eval';" +
+                        "connect-src * 'unsafe-inline' 'unsafe-eval;" +
+                        "style-src * 'unsafe-inline;";
+            }
+            return {
+                responseHeaders: details.responseHeaders
+            };
+        },
+        {
+            urls: ['http://*/*', 'https://*/*'],
+            types: [
+                'main_frame',
+                'sub_frame',
+                'stylesheet',
+                'script',
+                'image',
+                'object',
+                'xmlhttprequest',
+                'other'
+            ]
+        },
+        ['blocking', 'responseHeaders']
+    )
 
+}
+
+chrome.storage.local.get((items)=> {
+    let {enable} = items
+    if (enable === true) {
+        console.log('unblocking eval() in script src by overwritten meta in HTML headers')
+        unblockEvalinScrtipSrc()
+    }
+})
 
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     if (request.variable === 'enabled')

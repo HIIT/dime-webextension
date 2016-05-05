@@ -6,6 +6,8 @@
   "homepage_url": "https://github.com/HIIT/dime-webextension",
   "version": "0.1.2",
   "permissions": [
+    "webRequest",
+    "webRequestBlocking",
     "<all_urls>",
     "storage"
   ],
@@ -43,8 +45,7 @@
   "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'",
   "web_accessible_resources": [
     "dime.content.js",
-    "dime.logger.js",
-    "RankTermsWebWorker.js"
+    "dime.logger.js"
   ],
   "minimum_chrome_version": "33"
 }
