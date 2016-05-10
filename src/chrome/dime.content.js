@@ -26,7 +26,7 @@ function injectScript() {
 
       window.addEventListener('message', function(event) {
         if(event.data && event.data.type && event.data.type === 'compiledResult') {
-          let {pageURL, frequentTerms, pageTexts, imageURLs, hyperlinks, title, openGraphProtocol, metaTags, tags} = event.data.pageData
+          let {HTML, abstract, pageURL, hyperLinks, imgURLs, metaTags, openGraphProtocol, tags, text, title, frequentTerms} = event.data.pageData
           let dataWithDimeStructure = {
             '@type': 'DesktopEvent',
             type: 'http://www.semanticdesktop.org/ontologies/2010/01/25/nuao/#UsageEvent',
@@ -39,19 +39,19 @@ function injectScript() {
               tags: tags,
               isStoredAs: 'http://www.semanticdesktop.org/ontologies/2007/03/22/nfo/#RemoteDataObject',
               mimeType: 'application/json',
-              plainTextContent: JSON.stringify({pageTexts, frequentTerms, imageURLs, hyperlinks, openGraphProtocol, metaTags}),
+              plainTextContent: JSON.stringify({HTML, abstract, hyperLinks, imgURLs, metaTags, frequentTerms, openGraphProtocol, text}),
               uri: pageURL,
             }
           }
-          //var data = JSON.stringify(dataWithDimeStructure, undefined, 4)
-          //var blob = new Blob([data], {type: 'text/json'}),
-          //    e    = document.createEvent('MouseEvents'),
-          //    a    = document.createElement('a')
-          //a.download = 'hiit.json'
-          //a.href = window.URL.createObjectURL(blob)
-          //a.dataset.downloadurl =  ['text/json', a.download, a.href].join(':')
-          //e.initMouseEvent('click', true, false, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null)
-          //a.dispatchEvent(e)
+          var data = JSON.stringify(dataWithDimeStructure, undefined, 4)
+          var blob = new Blob([data], {type: 'text/json'}),
+              e    = document.createEvent('MouseEvents'),
+              a    = document.createElement('a')
+          a.download = 'hiit.json'
+          a.href = window.URL.createObjectURL(blob)
+          a.dataset.downloadurl =  ['text/json', a.download, a.href].join(':')
+          e.initMouseEvent('click', true, false, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null)
+          a.dispatchEvent(e)
           chrome.runtime.sendMessage({dataWithDimeStructure: dataWithDimeStructure}, (response) => {
               //console.log(response)
           });

@@ -114,6 +114,7 @@ window.addEventListener('message', (event) => {
                 let frequentTerms = await getFrequentWords(content, 10)
                 let articleHTML = cheerio.load(article.content.html())('*').removeAttr('class').removeAttr('id').removeAttr('style').html()
                 let innedCollection = ineed.collect.images.hyperlinks.fromHtml(articleHTML)
+                pageData.pageURL = pageURL
                 pageData.title = document.title
                 pageData.tags = frequentTerms.slice(0,8).map((term)=> {
                     return {
@@ -123,13 +124,14 @@ window.addEventListener('message', (event) => {
                         //date: Date.now()
                     }
                 })
+                pageData.frequentTerms = frequentTerms
                 pageData.abstract = article.excerpt
                 pageData.HTML = articleHTML
                 pageData.text = content
                 pageData.openGraphProtocol = await getOpenGraphProtocol()
                 pageData.metaTags = await getMetaTags()
-                pageData.imgURL = innedCollection.images
-                pageData.hyperLink =  innedCollection.hyperlinks
+                pageData.imgURLs = innedCollection.images
+                pageData.hyperLinks =  innedCollection.hyperlinks
             }
             console.log('page parsing is done.')
             return pageData
