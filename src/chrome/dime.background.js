@@ -96,7 +96,8 @@ chrome.browserAction.onClicked.addListener(() => {
 
 //detect URL changes
 chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
-    if(changeInfo){
+    console.log(changeInfo)
+    if(changeInfo.status && changeInfo.status === 'complete'){
         chrome.tabs.sendMessage(tabId, {data: tab})
     }
 });
