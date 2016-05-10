@@ -3,6 +3,16 @@ import ineed from 'ineed'
 import _ from 'underscore'
 import Tokenizer from 'tokenize-text'
 import stopWords from 'stopwords'
+import React from 'react'
+import ReactDOM from 'react-dom'
+import { Provider } from 'react-redux'
+import { createStore, applyMiddleware } from 'redux'
+import ReduxPromise from 'redux-promise'
+
+import readability from 'readability-js'
+import cheerio from 'cheerio'
+import reducers from './UI/reducers'
+import App from './UI/app'
 
 window.postMessage({
     type: 'fromInjectedJStoHook',
@@ -26,18 +36,7 @@ window.addEventListener('message', (event) => {
         //    pageXHR = []
         //}, 3000);
         const pageURL = event.data.message
-        const pageTexts = ineed.collect.texts.fromHtml(document.body.parentNode.innerHTML).texts
-        function getFrequenentWords(wordsArray, cutOff) {
-            let frequencies = {}
-            for (let word of wordsArray) {
-                frequencies[word] = frequencies[word] || 0;
-                frequencies[word]++;
-            }
-            let words = Object.keys( frequencies );
-            return words.sort((a,b) => {
-                return frequencies[b] -frequencies[a];
-            }).slice(0,cutOff);
-        }
+        //const pageTexts = ineed.collect.texts.fromHtml(document.body.parentNode.innerHTML).texts
         var timer = function(name) {
             var start = new Date();
             return {
@@ -47,37 +46,29 @@ window.addEventListener('message', (event) => {
                     console.log(name, 'finished in', time, 'ms');
                 }
             }
-        };
-        function getFrequentTerms () {
-            return new Promise ((resolve, reject) => {
-                const tokenize = new Tokenizer();
-                const englishReg = /^[A-Za-z]*$/;
-                const englishStopWords = stopWords.english
-                var timerTokenize = timer('tokenization');
-                let tokens = _.compact(_.flatten(pageTexts.map((content) => {
-                    return tokenize.words()(content.toString()).map((token) => {
-                        if (englishReg.test(token.value))
-                            return token.value.toLowerCase()
-                    })
-                })))
-                let terms = _.difference(tokens, englishStopWords);
-                timerTokenize.stop()
-                return resolve(getFrequenentWords(terms,50))
-            })
         }
-        function getImageURLs() {
-            return new Promise((resolve, reject) => {
-                resolve(ineed.collect.images.fromHtml(document.body.parentNode.innerHTML).images)
-            })
+        const englishReg = /^[A-Za-z]*$/
+        const englishStopWords = stopWords.english
+        function getTextTokens (content) {
+            const tokenize = new Tokenizer()
+            let tokens = tokenize.words()(content).map((token) => {return token.value})
+            let tokensInEnglish = tokens.filter((token)=> {return englishReg.test(token.value)})
+            let tokensWithOutStopWords =  _.difference(tokensInEnglish, englishStopWords)
+            return tokensWithOutStopWords
         }
-        function getHyperlinks() {
-            return new Promise((resolve, reject) => {
-                resolve(ineed.collect.hyperlinks.fromHtml(document.body.parentNode.innerHTML).hyperlinks)
-            })
-        }
-        function getTitle() {
-            return new Promise((resolve, reject) => {
-                resolve(ineed.collect.title.fromHtml(document.body.parentNode.innerHTML).title)
+        function getFrequentWords(content, numberOfWords) {
+            return new Promise((resolve) => {
+                let tokensWithOutStopWords = getTextTokens(content)
+                let frequencies = {}
+                for (let word of tokensWithOutStopWords) {
+                    frequencies[word] = frequencies[word] || 0;
+                    frequencies[word]++;
+                }
+                let words = Object.keys( frequencies );
+                let wordsRankedByFrequent = words.sort((a,b) => {
+                    return frequencies[b] -frequencies[a];
+                }).slice(0,numberOfWords)
+                resolve(wordsRankedByFrequent)
             })
         }
         function getOpenGraphProtocol() {
@@ -107,53 +98,63 @@ window.addEventListener('message', (event) => {
                 }).toArray())
             })
         }
+        function getArticle() {
+            return new Promise((resolve, reject) => {
+                readability(document.body.innerHTML, (err, article, meta) => {
+                    resolve(article);
+                });
+            })
+        }
         async function compile() {
             let pageData = {}
-            console.log('start parsing')
-            try {
-                pageData.frequentTerms = await getFrequentTerms()
-                pageData.imageURLs = await getImageURLs();
-                pageData.hyperlinks = await getHyperlinks();
-                pageData.title = await getTitle();
-                pageData.openGraphProtocol = await getOpenGraphProtocol();
-                pageData.metaTags = await getMetaTags();
-            } catch (error) {
-                console.log(error)
+            console.log('start parsing web page')
+            let article = await getArticle()
+            if (article) {
+                let content = article.content.text()
+                let frequentTerms = await getFrequentWords(content, 10)
+                let articleHTML = cheerio.load(article.content.html())('*').removeAttr('class').removeAttr('id').removeAttr('style').html()
+                let innedCollection = ineed.collect.images.hyperlinks.fromHtml(articleHTML)
+                pageData.title = document.title
+                pageData.tags = frequentTerms.slice(0,8).map((term)=> {
+                    return {
+                        '@type': 'Tag',
+                        text: term,
+                        //auto: true,
+                        //date: Date.now()
+                    }
+                })
+                pageData.abstract = article.excerpt
+                pageData.HTML = articleHTML
+                pageData.text = content
+                pageData.openGraphProtocol = await getOpenGraphProtocol()
+                pageData.metaTags = await getMetaTags()
+                pageData.imgURL = innedCollection.images
+                pageData.hyperLink =  innedCollection.hyperlinks
             }
-            pageData.pageTexts = pageTexts
-            pageData.pageURL = pageURL
-
             console.log('page parsing is done.')
             return pageData
+
         }
-        compile().then((pageData)=>{
-            //window.postMessage({
-            //    type: 'compiledResult',
-            //    pageData: pageData
-            //}, '*');
-            injectUI(pageData)
+        compile().then((pageData)=> {
+            console.log(pageData)
+            window.postMessage({
+                type: 'compiledResult',
+                pageData: pageData
+            }, '*');
+            //if (Object.keys(pageData).length === 0 || pageData.text.length < 150) {
+            //    console.log('no valuable text found on the page')
+            //    return
+            //}
+            //let dimeUIRoot = document.createElement('div');
+            //dimeUIRoot.setAttribute('class','dimeUIRoot');
+            //document.body.appendChild(dimeUIRoot)
+            //const store = createStore(reducers)
+            //console.log(pageData)
+            //ReactDOM.render(
+            //    <Provider store={store}>
+            //        <App pageData={pageData}/>
+            //    </Provider>
+            //    , document.querySelector('.dimeUIRoot'));
         })
     }
 })
-
-import React from 'react'
-import ReactDOM from 'react-dom'
-import { Provider } from 'react-redux'
-import { createStore, applyMiddleware } from 'redux'
-import ReduxPromise from 'redux-promise'
-
-import reducers from './UI/reducers'
-import App from './UI/app'
-
-function injectUI(pageData) {
-    let dimeUIRoot = document.createElement('div');
-    dimeUIRoot.setAttribute('class','dimeUIRoot');
-    document.body.appendChild(dimeUIRoot)
-    const store = createStore(reducers)
-
-    ReactDOM.render(
-        <Provider store={store}>
-            <App pageData={pageData}/>
-        </Provider>
-        , document.querySelector('.dimeUIRoot'));
-}
