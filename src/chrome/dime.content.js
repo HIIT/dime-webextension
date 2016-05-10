@@ -43,15 +43,15 @@ function injectScript() {
               uri: pageURL,
             }
           }
-          var data = JSON.stringify(dataWithDimeStructure, undefined, 4)
-          var blob = new Blob([data], {type: 'text/json'}),
-              e    = document.createEvent('MouseEvents'),
-              a    = document.createElement('a')
-          a.download = 'hiit.json'
-          a.href = window.URL.createObjectURL(blob)
-          a.dataset.downloadurl =  ['text/json', a.download, a.href].join(':')
-          e.initMouseEvent('click', true, false, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null)
-          a.dispatchEvent(e)
+          //var data = JSON.stringify(dataWithDimeStructure, undefined, 4)
+          //var blob = new Blob([data], {type: 'text/json'}),
+          //    e    = document.createEvent('MouseEvents'),
+          //    a    = document.createElement('a')
+          //a.download = 'hiit.json'
+          //a.href = window.URL.createObjectURL(blob)
+          //a.dataset.downloadurl =  ['text/json', a.download, a.href].join(':')
+          //e.initMouseEvent('click', true, false, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null)
+          //a.dispatchEvent(e)
           chrome.runtime.sendMessage({dataWithDimeStructure: dataWithDimeStructure}, (response) => {
               //console.log(response)
           });
