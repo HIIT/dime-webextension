@@ -5,9 +5,9 @@ import FloatingActionButton from 'material-ui/FloatingActionButton'
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import MediumEditor from 'medium-editor'
-import "../../../node_modules/bootstrap/dist/css/bootstrap.min.css"
+//import "../../../node_modules/bootstrap/dist/css/bootstrap.min.css"
 
-import "./css/editor.css"
+//import "./css/editor.css"
 import { loadPagerData } from './actions/index'
 import ClusteredTags from './components/clusteredTags'
 
