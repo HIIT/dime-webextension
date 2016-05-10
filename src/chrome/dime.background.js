@@ -96,7 +96,7 @@ chrome.browserAction.onClicked.addListener(() => {
 
 //detect URL changes
 chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
-    console.log(changeInfo)
+    //console.log(changeInfo)
     if(changeInfo.status && changeInfo.status === 'complete'){
         chrome.tabs.sendMessage(tabId, {data: tab})
     }
@@ -169,8 +169,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
         })
         sendResponse({
             enabled: localEnableVar
-        });
-
+        })
     if (request.dataWithDimeStructure) {
         chrome.storage.local.get(['apiUrl', 'username', 'password'], (items)=> {
             let {apiUrl, username, password} = items
