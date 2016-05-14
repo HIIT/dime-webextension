@@ -34,7 +34,7 @@ var saveOptions = function() {
   updateSkipSites(skipSites, apiUrl);
   document.getElementById('skip_sites').value = settings.skipSites;
 
-  chrome.storage.local.set({
+  chrome.storage.sync.set({
       apiUrl: apiUrl,
       username: username,
       password: password,
