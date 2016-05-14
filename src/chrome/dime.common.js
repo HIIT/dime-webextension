@@ -81,7 +81,7 @@ export function updateSkipSites(skipSitesText, apiUrl) {
 
 // Update settings from local storage
 export function updateSettings(callback) {
-  chrome.storage.local.get({
+  chrome.storage.sync.get({
       apiUrl: settings.apiUrl,
       username: settings.username,
       password: settings.password,
