@@ -1,18 +1,18 @@
 import $ from 'jquery'
 import ineed from 'ineed'
 import _ from 'underscore'
-import Tokenizer from 'tokenize-text'
-import stopWords from 'stopwords'
+
 import React from 'react'
 import ReactDOM from 'react-dom'
-import { Provider } from 'react-redux'
-import { createStore, applyMiddleware } from 'redux'
-import ReduxPromise from 'redux-promise'
+//import { Provider } from 'react-redux'
+//import { createStore, applyMiddleware } from 'redux'
+//import ReduxPromise from 'redux-promise'
 
 import readability from 'readability-js'
 import cheerio from 'cheerio'
-import reducers from './UI/reducers'
+//import reducers from './UI/reducers'
 import App from './UI/app'
+import getTextTokens from './getTextTokens'
 
 //const pageTexts = ineed.collect.texts.fromHtml(document.body.parentNode.innerHTML).texts
 var timer = function(name) {
@@ -24,15 +24,6 @@ var timer = function(name) {
             console.log(name, 'finished in', time, 'ms');
         }
     }
-}
-const englishReg = /^[A-Za-z]*$/
-const englishStopWords = stopWords.english
-function getTextTokens (content) {
-    const tokenize = new Tokenizer()
-    let tokens = tokenize.words()(content).map((token) => {return token.value})
-    let tokensInEnglish = tokens.filter((token)=> {return englishReg.test(token.value)})
-    let tokensWithOutStopWords =  _.difference(tokensInEnglish, englishStopWords)
-    return tokensWithOutStopWords
 }
 function getFrequentWords(content, numberOfWords) {
     return new Promise((resolve) => {
@@ -170,13 +161,13 @@ compile().then((pageData)=> {
         payload: pageDataWithDimeStructure
     }, '*')
     console.log('page data sent to dime, init UI')
-    //let dimeUIRoot = document.createElement('div');
-    //dimeUIRoot.setAttribute('class','dimeUIRoot');
-    //document.body.appendChild(dimeUIRoot)
+    let dimeUIRoot = document.createElement('div');
+    dimeUIRoot.setAttribute('class','dimeUIRoot');
+    document.body.appendChild(dimeUIRoot)
     //const store = createStore(reducers)
-    //ReactDOM.render(
-    //    <Provider store={store}>
-    //        <App pageData={pageData}/>
-    //    </Provider>
-    //    , document.querySelector('.dimeUIRoot'));
+    ReactDOM.render(
+            <div>
+                <App pageData={pageData} />
+            </div>
+        , document.querySelector('.dimeUIRoot'));
 })
