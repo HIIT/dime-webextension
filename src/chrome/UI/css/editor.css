@@ -1,18 +1,20 @@
 .shadow
 {
     position:relative;
-    -webkit-box-shadow:0 1px 4px rgba(0, 0, 0, 0.3), 0 0 40px rgba(0, 0, 0, 0.1) inset;
-    -moz-box-shadow:0 1px 4px rgba(0, 0, 0, 0.3), 0 0 40px rgba(0, 0, 0, 0.1) inset;
-    box-shadow:0 1px 4px rgba(0, 0, 0, 0.3), 0 0 40px rgba(0, 0, 0, 0.1) inset;
+    -webkit-box-shadow:0 1px 4px rgba(0, 0, 0, 0.15), 0 0 20px rgba(0, 0, 0, 0.05) inset;
+    -moz-box-shadow:0 1px 4px rgba(0, 0, 0, 0.15), 0 0 20px rgba(0, 0, 0, 0.05) inset;
+    box-shadow:0 1px 4px rgba(0, 0, 0, 0.15), 0 0 20px rgba(0, 0, 0, 0.05) inset;
 }
+
+/*
 .shadow:before, .shadow:after
 {
     content:"";
     position:absolute;
     z-index:-1;
-    -webkit-box-shadow:0 0 20px rgba(0,0,0,0.3);
-    -moz-box-shadow:0 0 20px rgba(0,0,0,0.3);
-    box-shadow:0 0 20px rgba(0,0,0,0.3);
+    -webkit-box-shadow:0 0 10px rgba(0,0,0,0.15);
+    -moz-box-shadow:0 0 10px rgba(0,0,0,0.15);
+    box-shadow:0 0 10px rgba(0,0,0,0.15);
     top:10px;
     bottom:10px;
     left:0;
@@ -31,15 +33,25 @@
     transform:skew(8deg) rotate(3deg);
 }
 
+
 ::-moz-selection {
     color: rgba(0,0,0,0.7) !important;
     background-color: #ccffea !important;
     text-shadow: 0 1px 0 rgba(255, 255, 255, 0.4);
-    font-size: 1.5em;
+    box-shadow: 0 3px 0 0 #91d7e4;
 }
 ::selection {
     color: rgba(0,0,0,0.7) !important;
     background-color: #ccffea !important;
     text-shadow: 0 1px 0 rgba(255, 255, 255, 0.4);
-    font-size: 1.5em;
+    box-shadow: 0 3px 0 0 #a4e2dc;
+}
+*/
+
+span.highlighted {
+    background-color: rgba(255, 255, 0, 0.7);
+}
+
+.medium-editor-toolbar {
+    z-index: 100000;
 }
