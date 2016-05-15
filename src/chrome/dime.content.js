@@ -12,9 +12,9 @@ function injectScript() {
   })
 }
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-  if (request.data.url) {
+  if (request.data.status === 'complete') {
     console.log('tab url changed')
-    chrome.storage.local.get(['skipSites'], (v)=> {
+    chrome.storage.sync.get(['skipSites'], (v)=> {
       let {skipSites} = v
       const notLocalhost = /^http:\/\/\w+(\.\w+)*(:[0-9]+)?\/?(\/[.\w]*)*$/
       if (skipSites.indexOf(window.location.href.replace(/.*?:\/\//g, "")) === -1 && !notLocalhost.test(window.location.href))
