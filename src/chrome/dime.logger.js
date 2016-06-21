@@ -2,8 +2,8 @@ import $ from 'jquery'
 import ineed from 'ineed'
 import _ from 'underscore'
 
-import React from 'react'
-import ReactDOM from 'react-dom'
+//import React from 'react'
+//import ReactDOM from 'react-dom'
 //import { Provider } from 'react-redux'
 //import { createStore, applyMiddleware } from 'redux'
 //import ReduxPromise from 'redux-promise'
@@ -11,20 +11,20 @@ import ReactDOM from 'react-dom'
 import readability from 'readability-js'
 import cheerio from 'cheerio'
 //import reducers from './UI/reducers'
-import App from './UI/app'
+//import App from './UI/app'
 import getTextTokens from './getTextTokens'
 
 //const pageTexts = ineed.collect.texts.fromHtml(document.body.parentNode.innerHTML).texts
-var timer = function(name) {
-    var start = new Date();
-    return {
-        stop: function() {
-            var end  = new Date();
-            var time = end.getTime() - start.getTime();
-            console.log(name, 'finished in', time, 'ms');
-        }
-    }
-}
+//var timer = function(name) {
+//    var start = new Date();
+//    return {
+//        stop: function() {
+//            var end  = new Date();
+//            var time = end.getTime() - start.getTime();
+//            console.log(name, 'finished in', time, 'ms');
+//        }
+//    }
+//}
 function getFrequentWords(content, numberOfWords) {
     return new Promise((resolve) => {
         let tokensWithOutStopWords = getTextTokens(content)
@@ -46,7 +46,7 @@ function getOpenGraphProtocol() {
             title: $('meta[property="og:title"]').attr('content'),
             type: $('meta[property="og:type"]').attr('content'),
             image: $('meta[property="og:image"]').attr('content'),
-            url: $('meta[property="og:url"]').attr('content'),
+            //url: $('meta[property="og:url"]').attr('content'),
             site_name: $('meta[property="og:site_name"]').attr('content'),
             audio: $('meta[property="og:audio"]').attr('content'),
             video: $('meta[property="og:video"]').attr('content'),
@@ -93,34 +93,33 @@ async function compile() {
         pageData.frequentTerms = frequentTerms
         pageData.abstract = article.excerpt
         pageData.HTML = articleHTML
-        pageData.text = content
-        pageData.imgURLs = innedCollection.images
-        pageData.hyperLinks =  innedCollection.hyperlinks
+        pageData.plainTextContent = content
+        pageData.imgURLs = innedCollection.images.map((i)=> { return {url: 'http:' + i.src, text: i.alt }})
+        pageData.hyperLinks =  innedCollection.hyperlinks.map((i)=> { return {url: (i.href.indexOf('http') === -1)? window.location.href + i.href: i.href, text: i.text}})
         pageData.pageURL = window.location.href
-        pageData.title = document.title
         pageData.openGraphProtocol = await getOpenGraphProtocol()
         pageData.metaTags = await getMetaTags()
+        pageData.title = document.title
     }
     return pageData
 
 }
 compile().then((pageData)=> {
-    if (_.isEmpty(pageData) || pageData.text.length < 100) {
+    if (_.isEmpty(pageData) || pageData.plainTextContent.length < 100) {
         console.log('no valuable text content found, send title/url/plain HTML only')
         const pageDataWithDimeStructure = {
             '@type': 'DesktopEvent',
             type: 'http://www.semanticdesktop.org/ontologies/2010/01/25/nuao/#UsageEvent',
             actor: 'DiMe browser extension',
             start: Date.now(),
-            origin: '0:0:0:0:0:0:0:1',
             targettedResource: {
-                '@type': 'Document',
+                '@type': 'WebDocument',
+                title: document.title,
                 isStoredAs: 'http://www.semanticdesktop.org/ontologies/2007/03/22/nfo/#RemoteDataObject',
+                type: 'http://www.semanticdesktop.org/ontologies/2007/03/22/nfo/#HtmlDocument',
                 mimeType: 'text/html',
                 plainTextContent: document.all[0].innerText,
-                type: 'http://www.semanticdesktop.org/ontologies/2007/03/22/nfo/#HtmlDocument',
                 uri: window.location.href,
-                title: document.title,
             }
         }
         window.postMessage({
@@ -135,23 +134,29 @@ compile().then((pageData)=> {
         type: 'http://www.semanticdesktop.org/ontologies/2010/01/25/nuao/#UsageEvent',
         actor: 'DiMe browser extension',
         start: Date.now(),
-        origin: '0:0:0:0:0:0:0:1',
         targettedResource: {
-            title: pageData.title,
-            '@type': 'Document',
-            type: 'http://www.semanticdesktop.org/ontologies/2007/03/22/nfo/#PlainTextDocument',
-            tags: pageData.tags,
+            '@type': 'WebDocument',
+            title: document.title,
             isStoredAs: 'http://www.semanticdesktop.org/ontologies/2007/03/22/nfo/#RemoteDataObject',
-            mimeType: 'application/json',
-            plainTextContent: JSON.stringify(_.omit(pageData), 'title', 'pageURL', 'tags'),
+            type: 'http://www.semanticdesktop.org/ontologies/2007/03/22/nfo/#HtmlDocument',
+            mimeType: 'text/html',
+            //tags: pageData.tags,
+            plainTextContent: pageData.plainTextContent,
             uri: pageData.pageURL,
+            frequentTerms: pageData.frequentTerms,
+            HTML: pageData.HTML,
+            abstract: pageData.abstract,
+            imgURLs: pageData.imgURLs,
+            hyperLinks: pageData.hyperLinks,
+            //OpenGraphProtocol: pageData.openGraphProtocol,
+            MetaTags: pageData.MetaTags,
         }
     }
-    //var data = JSON.stringify(dataWithDimeStructure, undefined, 4)
+    //var data = JSON.stringify(pageDataWithDimeStructure, undefined, 4)
     //var blob = new Blob([data], {type: 'text/json'}),
     //    e    = document.createEvent('MouseEvents'),
     //    a    = document.createElement('a')
-    //a.download = 'hiit.json'
+    //a.download = 'example.json'
     //a.href = window.URL.createObjectURL(blob)
     //a.dataset.downloadurl =  ['text/json', a.download, a.href].join(':')
     //e.initMouseEvent('click', true, false, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null)
@@ -160,14 +165,14 @@ compile().then((pageData)=> {
         type: 'pageDataWithDimeStructure',
         payload: pageDataWithDimeStructure
     }, '*')
-    console.log('page data sent to dime, init UI')
-    let dimeUIRoot = document.createElement('div');
-    dimeUIRoot.setAttribute('class','dimeUIRoot');
-    document.body.appendChild(dimeUIRoot)
-    //const store = createStore(reducers)
-    ReactDOM.render(
-            <div>
-                <App pageData={pageData} />
-            </div>
-        , document.querySelector('.dimeUIRoot'));
+    //console.log('page data sent to dime, init UI')
+    //let dimeUIRoot = document.createElement('div');
+    //dimeUIRoot.setAttribute('class','dimeUIRoot');
+    //document.body.appendChild(dimeUIRoot)
+    ////const store = createStore(reducers)
+    //ReactDOM.render(
+    //        <div>
+    //            <App pageData={pageData} />
+    //        </div>
+    //    , document.querySelector('.dimeUIRoot'));
 })

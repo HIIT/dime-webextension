@@ -165,6 +165,7 @@ chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
 
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     if (request.dataWithDimeStructure) {
+        //console.log(request.dataWithDimeStructure)
         chrome.storage.sync.get(['apiUrl', 'username', 'password'], (items)=> {
             let {apiUrl, username, password} = items
             var req = new XMLHttpRequest()
@@ -177,10 +178,12 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
                     console.log('sent to dime')
                 }  else if ( req.readyState == 4 ) {
                     //console.log(request.dataWithDimeStructure)
+                    console.log(request.dataWithDimeStructure)
                     console.log('error occurs when sent to dime server')
                     console.log(req)
                 }
             }
+
             req.send(JSON.stringify(request.dataWithDimeStructure))
         })
     }
