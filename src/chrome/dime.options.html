@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>DiMe Browser Extension Options</title>
+  <!--<style>-->
+    <!--body: { padding: 10px; }-->
+  <!--</style>-->
+</head>
+
+<body>
+  <p>
+    <label for="api_url">DiMe API URL:</label>
+    <input type="text" placeholder="http://localhost:8080/api" id="api_url" />
+  </p>
+
+  <p>
+    <label for="username">Username:</label>
+    <input type="text" placeholder="username" id="username" />
+  </p>
+
+  <p>
+    <label for="password">Password:</label>
+    <input type="password" placeholder="password" id="password" />
+  </p>
+
+  <p>
+    <label for="skip_sites">Don't log the following sites:</label><br>
+    <em>Enter the domains (e.g. facebook.com) of sites you don't want to be logged, one on each line.</em><br />
+    <textarea rows="5" cols="50" placeholder="example.com" id="skip_sites"></textarea>
+  </p>
+  <p>
+    <div id="status"></div>
+    <button id="save">Save</button>
+  </p>
+  <script src="dime.options.js"></script>
+</body>
+</html>
