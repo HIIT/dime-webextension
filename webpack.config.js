@@ -17,7 +17,7 @@ module.exports = {
     child_process: 'empty',
     dns: 'empty'
   },
-  devtool: 'eval-cheap-module-source-map',
+  devtool: 'inline-source-map',
   module: {
     loaders: [
       {
