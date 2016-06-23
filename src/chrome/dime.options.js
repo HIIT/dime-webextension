@@ -22,7 +22,7 @@
   SOFTWARE.
 */
 
-import {settings, skipSites, updateSkipSites, updateSettings, settingsChangeListener} from './dime.common'
+//import {settings, skipSites, updateSkipSites, updateSettings, settingsChangeListener} from './dime.common'
 
 // Save values from HTML form to storage
 var saveOptions = function() {
@@ -30,9 +30,8 @@ var saveOptions = function() {
   var username = document.getElementById('username').value;
   var password = document.getElementById('password').value;
   var skipSites = document.getElementById('skip_sites').value;
-    
-  updateSkipSites(skipSites, apiUrl);
-  document.getElementById('skip_sites').value = settings.skipSites;
+  //updateSkipSites(skipSites, apiUrl);
+  //document.getElementById('skip_sites').value = settings.skipSites;
 
   chrome.storage.sync.set({
       apiUrl: apiUrl,
@@ -41,7 +40,7 @@ var saveOptions = function() {
       skipSites: skipSites
   }, function() {
     var status = document.getElementById('status');
-      status.textContent = 'Options saved.';
+      status.textContent = 'DiMe Options Saved!';
       setTimeout(function() {
           status.textContent = '';
       }, 750);
@@ -49,13 +48,28 @@ var saveOptions = function() {
 }
 
 var restoreOptions = function() {
-    updateSettings(function(items) {
-        // Update values in HTML form
-        document.getElementById('api_url').value = items.apiUrl;
-        document.getElementById('username').value = items.username;
-        document.getElementById('password').value = items.password;
-        document.getElementById('skip_sites').value = items.skipSites;
-    });
+    //chrome.storage.sync.get({
+    //    favoriteColor: 'red',
+    //    likesColor: true
+    //}, function(items) {
+    //    document.getElementById('color').value = items.favoriteColor;
+    //    document.getElementById('like').checked = items.likesColor;
+    //})
+    chrome.storage.sync.get(['apiUrl', 'username', 'password', 'skipSites'], (items)=> {
+        let {apiUrl, username, password, skipSites} = items
+        document.getElementById('api_url').value = apiUrl
+        document.getElementById('username').value = username
+        document.getElementById('password').value = password
+        document.getElementById('skip_sites').value = skipSites
+
+    })
+    //updateSettings(function(items) {
+    //    // Update values in HTML form
+    //    document.getElementById('api_url').value = items.apiUrl;
+    //    document.getElementById('username').value = items.username;
+    //    document.getElementById('password').value = items.password;
+    //    document.getElementById('skip_sites').value = items.skipSites;
+    //});
 }
 
 // Load settings on startup
