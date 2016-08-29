@@ -143,10 +143,12 @@ function checkBlockList (tab) {
             let currentURL = new domurl(tab.url)
             let hostPlusPort = currentURL.host + ((currentURL.port.length > 0)? (':'+ currentURL.port) : '')
 
-            for (var line of v.skipSites.split('\n')) {
+            if (Array.isArray(v.skipSites)) {
+              for (var line of v.skipSites.split('\n')) {
                 if (line !== '') {
                     skipSiteArray.push(line);
                 }
+              }
             }
             let WWWskipSiteArray = skipSiteArray.map((i)=> {return 'www.' + i})
             if (skipSiteArray.indexOf(hostPlusPort) === -1 && WWWskipSiteArray.indexOf(hostPlusPort) === -1) {
@@ -336,7 +338,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
                     isStoredAs: 'http://www.semanticdesktop.org/ontologies/2007/03/22/nfo/#RemoteDataObject',
                     type: 'http://www.semanticdesktop.org/ontologies/2007/03/22/nfo/#HtmlDocument',
                     mimeType: 'text/html',
-                    //tags: pageData.tags,
+                    tags: pageData.tags,
                     plainTextContent: pageData.plainTextContent,
                     uri: pageData.pageURL,
                     frequentTerms: pageData.frequentTerms,
