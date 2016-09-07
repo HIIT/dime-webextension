@@ -11,7 +11,7 @@ export default function getTextTokens (content) {
     var numberReg = /[0-9]/g
     content = content.replace(punctuationReg, '').replace(numberReg,'').replace(spaceReg, ' ')
     let tokens = treebank(content).map((word)=> {
-        return porter(word)
+        return word
     })
     return _.difference(tokens, stopWords.english)
 }
