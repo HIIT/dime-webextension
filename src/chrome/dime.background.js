@@ -143,15 +143,13 @@ function checkBlockList (tab) {
             let currentURL = new domurl(tab.url)
             let hostPlusPort = currentURL.host + ((currentURL.port.length > 0)? (':'+ currentURL.port) : '')
 
-            if (Array.isArray(v.skipSites)) {
-              for (var line of v.skipSites.split('\n')) {
-                if (line !== '') {
-                    skipSiteArray.push(line);
-                }
+            for (let line of v.skipSites.split('\n')) {
+              if (line !== '') {
+                  skipSiteArray.push(line);
               }
             }
             let WWWskipSiteArray = skipSiteArray.map((i)=> {return 'www.' + i})
-            if (skipSiteArray.indexOf(hostPlusPort) === -1 && WWWskipSiteArray.indexOf(hostPlusPort) === -1) {
+            if (skipSiteArray.indexOf(hostPlusPort) === -1 && WWWskipSiteArray.indexOf(hostPlusPort) === -1 && skipSiteArray.indexOf(hostPlusPort) === -1) {
                 resolve(true)
             } else {
                 console.log('url in blocklist')
