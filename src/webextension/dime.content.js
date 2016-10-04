@@ -1,6 +1,5 @@
 chrome.runtime.onMessage.addListener((tab) => { // eslint-disable-line no-undef
   if (tab.status === 'complete') {
-    console.log(tab)
     chrome.runtime.sendMessage({ // eslint-disable-line no-undef
       document: {
         innerHTML: document.body.innerHTML,
