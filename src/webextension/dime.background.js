@@ -2,8 +2,8 @@
 import DomURL from 'domurl';
 import ineed from 'ineed';
 import _ from 'underscore';
-import readability from 'readability-js';
-import cheerio from 'cheerio';
+// import readability from 'readability-js';
+// import cheerio from 'cheerio';
 import getTextTokens from './getTextTokens';
 
 const browser = chrome; // eslint-disable-line no-undef
@@ -133,46 +133,6 @@ function checkDiMeAlive() {
   });
 }
 
-function unblockEvalinScrtipSrc() {
-  // console.log('unblocking eval() in script src by overwritten meta in HTML headers')
-  // modified from https://github.com/medialab/artoo/blob/master/chrome/background.js
-  browser.webRequest.onHeadersReceived.addListener((details) => {
-    const possibleHeaders = [
-      'x-webkit-csp',
-      'content-security-policy',
-    ];
-    const l = details.responseHeaders.length;
-    for (let i = 0; i < l; i += 1) {
-      const o = details.responseHeaders[i];
-      if (possibleHeaders.indexOf(o.name.toLowerCase()) >= 0) {
-        o.value =
-          'default-src *;' +
-          "script-src * 'unsafe-inline' 'unsafe-eval';" +
-          "connect-src * 'unsafe-inline' 'unsafe-eval;" +
-          "style-src * 'unsafe-inline;";
-      }
-    }
-    return {
-      responseHeaders: details.responseHeaders,
-    };
-  },
-    {
-      urls: ['http://*/*', 'https://*/*'],
-      types: [
-        'main_frame',
-        'sub_frame',
-        'stylesheet',
-        'script',
-        'image',
-        'object',
-        'xmlhttprequest',
-        'other',
-      ],
-    },
-    ['blocking', 'responseHeaders']
-  );
-}
-
 function checkEnable() {
   return new Promise((resolve) => {
     browser.storage.local.get(['enable'], (v) => {
@@ -209,7 +169,6 @@ async function init(tabId, tab) {
   // console.log("notInBlockList = " + notInBlockList)
   if (alive && enable && notInBlockList) {
     // console.log(tab)
-    unblockEvalinScrtipSrc();
     browser.tabs.sendMessage(tabId, tab);
     // console.log('tab data sent to content script');
   }
@@ -228,6 +187,13 @@ function sendToDiMe(dataWithDimeStructure) {
       if (req.status === 200 && req.readyState === 4) {
         // console.log(dataWithDimeStructure)
         // console.log('sent to dime')
+        browser.browserAction.setIcon({ path: {
+          16: 'icon-saved-16.png',
+          19: 'icon-saved-19.png',
+          32: 'icon-saved-32.png',
+          38: 'icon-saved-38.png',
+          64: 'icon-saved-64.png',
+        } });
       } else if (req.readyState === 4) {
         // console.log(request.dataWithDimeStructure)
         // console.log(dataWithDimeStructure)
@@ -281,20 +247,20 @@ function getFrequentWords(content, numberOfWords) {
 //     }).toArray());
 //   });
 // }
-function getArticle(document) {
-  return new Promise((resolve) => {
-    readability(document.innerHTML, (err, article) => {
-      resolve(article);
-    });
-  });
-}
+// function getArticle(document) {
+//   return new Promise((resolve) => {
+//     readability(document.innerHTML, (err, article) => {
+//       resolve(article);
+//     });
+//   });
+// }
 async function compile(document, url) {
   const pageData = {};
-  const article = await getArticle(document);
+  const article = document.innerHTML;
   if (article && article.content) {
     const content = article.content.text();
     const frequentTerms = await getFrequentWords(content, 10);
-    const articleHTML = cheerio.load(article.content.html())('*').removeAttr('class').removeAttr('id').removeAttr('style').html();
+    const articleHTML = document.innerHTML;
     const innedCollection = ineed.collect.images.hyperlinks.fromHtml(articleHTML);
     pageData.tags = frequentTerms.slice(0, 8).map(term => ({ '@type': 'Tag', text: term }));
     pageData.frequentTerms = frequentTerms;
