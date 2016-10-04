@@ -1,4 +1,5 @@
 const CopyWebpackPlugin = require('copy-webpack-plugin');
+
 module.exports = {
   entry: {
     'dime.content': './src/webextension/dime.content.js',
