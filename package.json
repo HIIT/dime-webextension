@@ -1,13 +1,17 @@
 {
   "name": "dime-webextension",
-  "version": "0.0.1",
   "description": "web extensions for different browsers",
   "main": "none",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "webpack --config webpack.config.js --watch",
-    "dev:safri": "webpack --config webpack.safari.config.js --watch",
-    "build": "webpack --config webpack.config.js && gulp"
+    "start": "concurrently \"npm run dev:webextension\" \"npm run dev:safari\"",
+    "dev:webextension": "webpack --config webpack.webextension.config.js --watch --colors",
+    "dev:safari": "webpack --config webpack.safari.config.js --watch --colors",
+    "build": "npm run build:webextension && npm run build:safari",
+    "build:webextension": "webpack --config webpack.webextension.config.js",
+    "build:safari": "webpack --config webpack.safari.config.js && gulp safari",
+    "dist:chrome": "webpack --config webpack.webextension.config.js && gulp chrome-crx && gulp chrome-zip",
+    "dist:firefox": "web-ext sign --source-dir ./build/webextension --artifacts-dir ./dist/firefox"
   },
   "repository": {
     "type": "git",
@@ -94,6 +98,7 @@
     "babel-preset-react": "^6.11.1",
     "babel-preset-stage-0": "^6.16.0",
     "babel-runtime": "^6.6.1",
+    "concurrently": "^3.1.0",
     "copy-webpack-plugin": "^2.1.1",
     "css-loader": "^0.23.1",
     "eslint": "^3.7.0",
@@ -105,6 +110,7 @@
     "file-loader": "^0.8.5",
     "gulp": "^3.9.1",
     "gulp-crx-pack": "^1.0.1",
+    "gulp-zip": "^3.2.0",
     "html-loader": "^0.4.3",
     "html-webpack-plugin": "^2.22.0",
     "json-loader": "^0.5.4",
@@ -112,6 +118,7 @@
     "run-sequence": "^1.1.5",
     "style-loader": "^0.13.1",
     "url-loader": "^0.5.7",
+    "web-ext": "^1.4.0",
     "webpack": "^1.12.9",
     "webpack-stream": "^3.1.0"
   },
