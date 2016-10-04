@@ -6,9 +6,11 @@
   "homepage_url": "https://github.com/HIIT/dime-webextension",
   "version": "0.2.2",
   "permissions": [
+    "http://*/*",
+    "https://*/*",
     "webRequest",
     "webRequestBlocking",
-    "<all_urls>",
+    "tabs",
     "storage"
   ],
   "icons": {
@@ -24,8 +26,11 @@
   "browser_action": {
     "default_title": "dime",
     "default_icon": {
+      "16": "icon16.png",
       "19": "icon19.png",
-      "38": "icon38.png"
+      "32": "icon32.png",
+      "38": "icon38.png",
+      "64": "icon64.png"
     }
   },
   "content_scripts": [

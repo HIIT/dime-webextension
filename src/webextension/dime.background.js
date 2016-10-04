@@ -6,61 +6,108 @@ import readability from 'readability-js';
 import cheerio from 'cheerio';
 import getTextTokens from './getTextTokens';
 
-const chrome = chrome;
+const browser = chrome; // eslint-disable-line no-undef
 
+// Default Settings
 const defaultSettings = {
   apiUrl: 'http://localhost:8080/api',
   username: 'testuser',
   password: 'testuser123',
-  skipSites: ['localhost:8080'],
+  skipSites: 'localhost:8080\n',
   enable: true,
 };
 
-function setIconByConnectionStatus(disconneted) {
-  if (disconneted) {
-    chrome.browserAction.setIcon({ path: { 19: 'icon19-disconnected.png', 38: 'icon38-disconnected.png' } });
-  } else {
-    checkEnable().then((enable) => {
-      if (enable) {
-        chrome.browserAction.setIcon({ path: { 19: 'icon19.png', 38: 'icon38.png' } });
-      } else {
-        chrome.browserAction.setIcon({ path: { 19: 'icon19-disabled.png', 38: 'icon38-disabled.png' } });
-      }
-    });
-  }
-}
+// Set defaultSettings when browser.storage.get return null
+browser.storage.local.get((v) => {
+  if (typeof v.apiUrl === 'undefined') browser.storage.local.set({ apiUrl: defaultSettings.apiUrl });
+  if (typeof v.username === 'undefined') browser.storage.local.set({ username: defaultSettings.username });
+  if (typeof v.password === 'undefined') browser.storage.local.set({ password: defaultSettings.password });
+  if (typeof v.skipSites === 'undefined') browser.storage.local.set({ skipSites: defaultSettings.skipSites });
+  if (typeof v.enable === 'undefined') browser.storage.local.set({ enable: true });
+});
 
-chrome.storage.onChanged.addListener((changes) => {
+browser.storage.onChanged.addListener((changes) => {
   if (typeof changes.enable !== 'undefined') {
     if (changes.enable.newValue) {
-      chrome.browserAction.setIcon({ path: { 19: 'icon19.png', 38: 'icon38.png' } });
+      browser.browserAction.setIcon({ path: {
+        16: 'icon16.png',
+        19: 'icon19.png',
+        32: 'icon32.png',
+        38: 'icon38.png',
+        64: 'icon64.png',
+      } });
     } else {
-      chrome.browserAction.setIcon({ path: { 19: 'icon19-disabled.png', 38: 'icon38-disabled.png' } });
+      browser.browserAction.setIcon({ path: {
+        16: 'icon-disabled-16.png',
+        19: 'icon-disabled-19.png',
+        32: 'icon-disabled-32.png',
+        38: 'icon-disabled-38.png',
+        64: 'icon-disabled-64.png',
+      } });
     }
   }
 });
 
-chrome.browserAction.onClicked.addListener(() => {
+browser.browserAction.onClicked.addListener(() => {
   checkDiMeAlive().then((alive) => {
     if (alive) {
       checkEnable().then((v) => {
-        chrome.storage.sync.set({ enable: !v });
+        browser.storage.local.set({ enable: !v });
       });
     }
   });
 });
 
-chrome.storage.sync.get((v) => {
-  if (typeof v.apiUrl === 'undefined') chrome.storage.sync.set({ apiUrl: defaultSettings.apiUrl });
-  if (typeof v.username === 'undefined') chrome.storage.sync.set({ username: defaultSettings.username });
-  if (typeof v.password === 'undefined') chrome.storage.sync.set({ password: defaultSettings.password });
-  if (typeof v.skipSites === 'undefined') chrome.storage.sync.set({ skipSites: defaultSettings.skipSites });
-  if (typeof v.enable === 'undefined') chrome.storage.sync.set({ enable: true });
+let visitedURL = null;
+browser.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
+  if (changeInfo.status && changeInfo.status === 'complete' && tab.url) {
+    if (tab.url === visitedURL) {
+      // console.log('a duplicated url: ' +  visitedURL)
+    } else {
+      // console.log(visitedURL);
+      // console.log(tab.url);
+      visitedURL = tab.url;
+      // console.log('call init')
+      init(tabId, tab);
+    }
+  }
 });
+
+function setIconByConnectionStatus(disconneted) {
+  if (disconneted) {
+    browser.browserAction.setIcon({ path: {
+      16: 'icon-disconnected-16.png',
+      19: 'icon-disconnected-19.png',
+      32: 'icon-disconnected-32.png',
+      38: 'icon-disconnected-38.png',
+      64: 'icon-disconnected-64.png',
+    } });
+  } else {
+    checkEnable().then((enable) => {
+      if (enable) {
+        browser.browserAction.setIcon({ path: {
+          16: 'icon16.png',
+          19: 'icon19.png',
+          32: 'icon32.png',
+          38: 'icon38.png',
+          64: 'icon64.png',
+        } });
+      } else {
+        browser.browserAction.setIcon({ path: {
+          16: 'icon-disabled-16.png',
+          19: 'icon-disabled-19.png',
+          32: 'icon-disabled-32.png',
+          38: 'icon-disabled-38.png',
+          64: 'icon-disabled-64.png',
+        } });
+      }
+    });
+  }
+}
 
 function checkDiMeAlive() {
   return new Promise((resolve) => {
-    chrome.storage.sync.get(['apiUrl'], (items) => {
+    browser.storage.local.get(['apiUrl'], (items) => {
       const { apiUrl } = items;
       if (apiUrl) {
         const req = new XMLHttpRequest();
@@ -74,7 +121,7 @@ function checkDiMeAlive() {
           } else if (req.readyState === 4) {
             const disconnected = true;
             setIconByConnectionStatus(disconnected);
-            chrome.storage.sync.get(['apiUrl'], () => {
+            browser.storage.local.get(['apiUrl'], () => {
               // console.log(`connection with dime at ${items.apiUrl} error`);
             });
             resolve(false);
@@ -89,7 +136,7 @@ function checkDiMeAlive() {
 function unblockEvalinScrtipSrc() {
   // console.log('unblocking eval() in script src by overwritten meta in HTML headers')
   // modified from https://github.com/medialab/artoo/blob/master/chrome/background.js
-  chrome.webRequest.onHeadersReceived.addListener((details) => {
+  browser.webRequest.onHeadersReceived.addListener((details) => {
     const possibleHeaders = [
       'x-webkit-csp',
       'content-security-policy',
@@ -97,7 +144,7 @@ function unblockEvalinScrtipSrc() {
     const l = details.responseHeaders.length;
     for (let i = 0; i < l; i += 1) {
       const o = details.responseHeaders[i];
-      if (possibleHeaders.indexOf(o.name.toLowerCase())) {
+      if (possibleHeaders.indexOf(o.name.toLowerCase()) >= 0) {
         o.value =
           'default-src *;' +
           "script-src * 'unsafe-inline' 'unsafe-eval';" +
@@ -128,7 +175,7 @@ function unblockEvalinScrtipSrc() {
 
 function checkEnable() {
   return new Promise((resolve) => {
-    chrome.storage.sync.get(['enable'], (v) => {
+    browser.storage.local.get(['enable'], (v) => {
       resolve(v.enable);
     });
   });
@@ -136,7 +183,7 @@ function checkEnable() {
 
 function checkBlockList(tab) {
   return new Promise((resolve) => {
-    chrome.storage.sync.get(['skipSites'], (v) => {
+    browser.storage.local.get(['skipSites'], (v) => {
       const skipSiteArray = [];
       const currentURL = new DomURL(tab.url);
       const hostPlusPort = currentURL.host + ((currentURL.port.length > 0) ? `:${currentURL.port}` : '');
@@ -163,30 +210,15 @@ async function init(tabId, tab) {
   if (alive && enable && notInBlockList) {
     // console.log(tab)
     unblockEvalinScrtipSrc();
-    chrome.tabs.sendMessage(tabId, { data: tab });
+    browser.tabs.sendMessage(tabId, tab);
     // console.log('tab data sent to content script');
   }
 }
 
 checkDiMeAlive();
 
-let visitedURL = null;
-chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
-  if (changeInfo.status && changeInfo.status === 'complete' && tab.url) {
-    if (tab.url === visitedURL) {
-      // console.log('a duplicated url: ' +  visitedURL)
-    } else {
-      // console.log(visitedURL);
-      // console.log(tab.url);
-      visitedURL = tab.url;
-      // console.log('call init')
-      init(tabId, tab);
-    }
-  }
-});
-
 function sendToDiMe(dataWithDimeStructure) {
-  chrome.storage.sync.get(['apiUrl', 'username', 'password'], (items) => {
+  browser.storage.local.get(['apiUrl', 'username', 'password'], (items) => {
     const { apiUrl, username, password } = items;
     const req = new XMLHttpRequest();
     req.open('POST', `${apiUrl}/data/event`);
@@ -264,7 +296,7 @@ async function compile(document, url) {
     const frequentTerms = await getFrequentWords(content, 10);
     const articleHTML = cheerio.load(article.content.html())('*').removeAttr('class').removeAttr('id').removeAttr('style').html();
     const innedCollection = ineed.collect.images.hyperlinks.fromHtml(articleHTML);
-    pageData.tags = frequentTerms.slice(0, 8).map(term => ({ '@Type': 'Tag', text: term }));
+    pageData.tags = frequentTerms.slice(0, 8).map(term => ({ '@type': 'Tag', text: term }));
     pageData.frequentTerms = frequentTerms;
     if (article.excerpt) { pageData.abstract = article.excerpt; }
     pageData.HTML = articleHTML;
@@ -279,31 +311,32 @@ async function compile(document, url) {
   }
   return pageData;
 }
+
 let compiledURL = null;
-chrome.runtime.onMessage.addListener((request) => {
+browser.runtime.onMessage.addListener((request) => {
   if (request.document && request.url !== compiledURL) {
     const { document, url } = request;
     compiledURL = url;
     // console.log(request)
     // console.log(document)
     compile(document, url).then((pageData) => {
+      const simplePageDataWithDimeStructure = {
+        '@type': 'DesktopEvent',
+        type: 'http://www.semanticdesktop.org/ontologies/2010/01/25/nuao/#UsageEvent',
+        actor: 'DiMe browser extension',
+        start: Date.now(),
+        targettedResource: {
+          '@type': 'WebDocument',
+          title: document.title,
+          isStoredAs: 'http://www.semanticdesktop.org/ontologies/2007/03/22/nfo/#RemoteDataObject',
+          type: 'http://www.semanticdesktop.org/ontologies/2007/03/22/nfo/#HtmlDocument',
+          mimeType: 'text/html',
+          plainTextContent: document.innerText,
+          uri: url,
+        },
+      };
       if (_.isEmpty(pageData) || pageData.plainTextContent.length < 100) {
         // console.log('no valuable text content found, send title/url/plain HTML only')
-        const simplePageDataWithDimeStructure = {
-          '@type': 'DesktopEvent',
-          type: 'http://www.semanticdesktop.org/ontologies/2010/01/25/nuao/#UsageEvent',
-          actor: 'DiMe browser extension',
-          start: Date.now(),
-          targettedResource: {
-            '@type': 'WebDocument',
-            title: document.title,
-            isStoredAs: 'http://www.semanticdesktop.org/ontologies/2007/03/22/nfo/#RemoteDataObject',
-            type: 'http://www.semanticdesktop.org/ontologies/2007/03/22/nfo/#HtmlDocument',
-            mimeType: 'text/html',
-            plainTextContent: document.innerText,
-            uri: url,
-          },
-        };
         sendToDiMe(simplePageDataWithDimeStructure);
         // console.log('simple page data sent to dime')
         return;
