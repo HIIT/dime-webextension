@@ -2,7 +2,7 @@ const CopyWebpackPlugin = require('copy-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 module.exports = {
   entry: {
-    'global-safari': './src/webextension/global-safari.js',
+    'global-safari': './src/safari/global-safari.js',
   },
   output: {
     path: `${__dirname}/build/safari`,
