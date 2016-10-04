@@ -1,25 +1,30 @@
-### Features
+#Dime-Webextension
 
-* Archiving browersing history to DiMe server.
-* Icons showing DiMe server's status (alive/disconnected).
-* Enable/Disable archiving
+Browser extension (Chrome, Firefox, Vivaldi, Opera, Microsoft Edge, and Safari) to track you digital footprint. Automatically archive the essential data(most frequent keywords, Meta Tags, plain text content and more) of the webpage you visited. [DiMe server](https://github.com/HIIT/dime-server) need to be installed.
+
+#### Features
+
+* Archiving browersing history to [DiMe server](https://github.com/HIIT/dime-server).
+* Icons showing DiMe server's status (archived/DiMe is alive/DiMe is disconnected).
+* Enable/Disable archiving by one-click.
+* Support Chrome, Firefox(48+), Vivaldi Opera, and Microsoft Edge. Limited functions for Safari.
 
 #### Development
 
-
-##### Setup Development Environment
+##### 0. Setup Development Environment
 
 1. Install node.js <https://nodejs.org/en/>.
 2. Go to the root of the folder; ``npm install`` to fetch all NPM packages.
 
-##### Run Webpack/Babel
+##### 1. Run Webpack/Babel
 
 0. The extension is written in ES2015+(the next generation Javascript), the Javascript files need to be compiled into ES5 sytax before for better compatbility. We choose [Babel](https://babeljs.io/) as the compiler and [Webpack](https://webpack.github.io/) as the module bundler.
 1. ``npm start`` activates enviorment.
 2. (optional) ``npm start`` will run two NPM scripts concurrently. One script is for Webextension(Chrome/Firefox/Opera/Edge)=``dev:webextension``. It will watch the source files in ``./src/webextension``. Another script is for Safari extension(``dev:safari``). You could ``npm run dev:webextension`` if not foucsing on Safari extension developement.
 3. There will be folders in ``./build`` such as ``./build/safari`` and ``./build/safari``. These folders contain compiled(from ES2015 to ES5) but unpacked extension. You could load these unpacked extnesions in browsers. See below for detailed instructions for Chrome, Firefox and Safari.
 
-##### Load Unpacked Extnesions in Chrome
+##### 2. Load Unpacked Extnesions
+###### Load Unpacked Extnesions in Chrome
 
 1. Go to ``chrome://extensions/``, enable Developer mode, click ``load unpack extension``, and point the path to ``./build/webextension``
 2. Edit files in ``./src/webextension``, webpack-dev-server will automatcally repack the extension.
@@ -27,15 +32,15 @@
 3. To see console messages and errors from ``./src/webextension/dime.background``. Go to ``chrome://extensions/``, click ``Inspect views: background page``.
 4. Console messages and errors in ``dime.content`` will appear in normal console of browser.
 
-##### Load Unpacked Extnesions in Firefox
+###### Load Unpacked Extnesions in Firefox
 
 0. You should consider using Chrome instead since in Firefox, the Webextension debugging tool is still not ready.
 1. Enter ``about:debugging`` in the URL bar.
 2. Click ``Load Temporary Add-on``.
 3. Open ``./src/webextension/`` directory and select any file.
-4. See more details and instructions in  [MDN][https://developer.mozilla.org/en-US/Add-ons/WebExtensions/Temporary_Installation_in_Firefox]
+4. See more details and instructions in  [MDN]<https://developer.mozilla.org/en-US/Add-ons/WebExtensions/Temporary_Installation_in_Firefox>
 
-##### Load Unpacked Extnesions in Safari
+###### Load Unpacked Extnesions in Safari
 
 0. Currently, it is not possible to load uppacked extension in Safari. You have to pack it in a folder with extnesion of with extension of “safariextension”.
 1. To do so, ``npm run build:safari``, a folder with extension of “safariextension” will appear ``./dist/safari``.
@@ -45,7 +50,7 @@
 
 #### Distribution
 
-#### Distribute as Chrome Extensions (.crx)
+##### Distribute as Chrome Extensions (.crx)
 
 It is necessart to publish signed extension on Chrome Web Store.
 
@@ -58,7 +63,7 @@ It is necessart to publish signed extension on Chrome Web Store.
 5. Upload the ZIP file using the [Chrome Developer Dashboard](https://chrome.google.com/webstore/developer/dashboard).
 6. See more details on [Chrome Devloper](https://developer.chrome.com/extensions/packaging#upload) website.
 
-#### Distribute as Firefox Add-on (.xpi)
+##### Distribute as Firefox Add-on (.xpi)
 
 The extension need to be signed by Mozilla.
 
