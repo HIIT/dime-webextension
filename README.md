@@ -47,7 +47,9 @@
 
 #### Distribute as Chrome Extensions (.crx)
 
->As of Chrome 44, no external installs are allowed from a path to a local .crx on Mac (see Continuing to protect Chrome users from malicious extensions). (from [here](https://developer.chrome.com/extensions/hosting))
+It is necessart to publish signed extension on Chrome Web Store.
+
+>As of Chrome 33, Windows users can only download extensions hosted in the Chrome Web store, except for installs via enterprise policy or developer mode (see Protecting Windows users from malicious extensions). As of Chrome 44, no external installs are allowed from a path to a local .crx on Mac (from [here](https://developer.chrome.com/extensions/hosting))
 
 1. HIIT distubuter should has the offical ``key.pem`` file. If you want to distubute you could generate your own ``.pem`` (see <https://developer.chrome.com/extensions/packaging>
 2. Place ``key.pem ``in ``./src/certs/``. Note that the filename has to be ``key.pem``.
@@ -58,8 +60,12 @@
 
 #### Distribute as Firefox Add-on (.xpi)
 
-1. ``npm run build:webextension``
-2. HIIT distubuter should has the offical API key(JWT issuer) and API secret(JWT secret).
+The extension need to be signed by Mozilla.
+
+> Starting with Firefox 43 ... Extensions and multipackage installers that support Firefox need to be signed by Mozilla in order for them to be installable in release and beta versions of Firefox. ... Only Mozilla can sign your add-on so that Firefox will install it by default. Add-ons are signed by submitting them to AMO or using the API and passing either an automated or manual code review. (from [here](https://developer.mozilla.org/en-US/Add-ons/Distribution))
+
+1. HIIT distubuter should has the offical API key(JWT issuer) and API secret(JWT secret).
+2. ``npm run build:webextension`` compile the source code.
 2. Build and sign the extension by ``npm run dist:firefox -- --api-key=[your-API-key] --api-secret=[your-API-secret]``.
 3. A .xpi file should appear in ``./dist/firefox``
 4. see more details on [MDN]<https://developer.mozilla.org/en-US/Add-ons/WebExtensions/Getting_started_with_web-ext>.
