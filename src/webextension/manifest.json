@@ -1,5 +1,5 @@
 {
-  "name": "DiMe Browser Extension for Chrome",
+  "name": "dime-webextension",
   "author": "University of Helsinki, Mats Sjöberg <mats.sjoberg@helsinki.fi>",
   "manifest_version": 2,
   "description": "Logs your browsing history to DiMe",
@@ -40,7 +40,6 @@
       "run_at": "document_end"
     }
   ],
-
   "background": {
       "scripts": [
         "dime.background.js"
@@ -52,5 +51,9 @@
     "dime.content.js",
     "dime.logger.js"
   ],
+  "gecko": {
+    "strict_min_version": "48.0",
+    "update_url": "https://example.com/updates.json"
+  },
   "minimum_chrome_version": "33"
 }
