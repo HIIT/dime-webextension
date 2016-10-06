@@ -2,7 +2,7 @@
 import DomURL from 'domurl';
 import ineed from 'ineed';
 import _ from 'underscore';
-// import readability from 'readability-js';
+import readability from 'readability-js';
 // import cheerio from 'cheerio';
 import getTextTokens from './getTextTokens';
 
@@ -247,16 +247,16 @@ function getFrequentWords(content, numberOfWords) {
 //     }).toArray());
 //   });
 // }
-// function getArticle(document) {
-//   return new Promise((resolve) => {
-//     readability(document.innerHTML, (err, article) => {
-//       resolve(article);
-//     });
-//   });
-// }
+function getArticle(document) {
+  return new Promise((resolve) => {
+    readability(document.innerHTML, (err, article) => {
+      resolve(article);
+    });
+  });
+}
 async function compile(document, url) {
   const pageData = {};
-  const article = document.innerHTML;
+  const article = await getArticle(document);
   if (article && article.content) {
     const content = article.content.text();
     const frequentTerms = await getFrequentWords(content, 10);
