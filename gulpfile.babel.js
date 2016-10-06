@@ -13,8 +13,8 @@ gulp.task('chrome-crx', () => {
     .pipe(gulp.dest('./dist/chrome'));
 });
 
-gulp.task('chrome-zip', () => {
-  gulp.src(['./dist/chrome/dime-chrome-extension.crx', './src/certs/key.pem'])
+gulp.task('chrome-zip-for-dist', () => {
+  gulp.src(['./build/webextension/**/*', './src/certs/key.pem'])
     .pipe(zip('dime-chrome-extension.zip'))
     .pipe(gulp.dest('./dist/chrome'));
 });
