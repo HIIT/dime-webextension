@@ -5,7 +5,7 @@ import crx from 'gulp-crx-pack';
 import fs from 'fs';
 
 gulp.task('chrome-crx', () => {
-  gulp.src('./build/webextension/**/*')
+  gulp.src('./build/webextension')
     .pipe(crx({
       privateKey: fs.readFileSync('./src/certs/key.pem', 'utf8'),
       filename: 'dime-chrome-extension.crx',
