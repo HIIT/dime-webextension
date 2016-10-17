@@ -37,7 +37,7 @@ Browser extension (Chrome, Firefox, Vivaldi, Opera, Microsoft Edge, and Safari) 
 0. You should consider using Chrome instead since in Firefox, the Webextension debugging tool is still not ready.
 1. Enter ``about:debugging`` in the URL bar.
 2. Click ``Load Temporary Add-on``.
-3. Open ``./src/webextension/`` directory and select any file.
+3. Open ``./build/webextension/`` directory and select any file.
 4. See more [details and instructions in  MDN](https://developer.mozilla.org/en-US/Add-ons/WebExtensions/Temporary_Installation_in_Firefox)
 
 ###### Load Unpacked Extensions in Safari
