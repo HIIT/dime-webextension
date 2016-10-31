@@ -5,12 +5,12 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "concurrently \"npm run dev:webextension\" \"npm run dev:safari\"",
-    "dev:webextension": "webpack --config webpack.webextension.config.js --watch --colors",
-    "dev:safari": "webpack --config webpack.safari.config.js --watch --colors",
+    "dev:webextension": "webpack --config webpack.webextension.js --watch --colors",
+    "dev:safari": "webpack --config webpack.safari.js --watch --colors",
     "build": "npm run build:webextension && npm run build:safari",
-    "build:webextension": "webpack --config webpack.webextension.config.js",
-    "build:safari": "webpack --config webpack.safari.config.js && gulp safari",
-    "dist:chrome": "webpack --config webpack.webextension.config.js && gulp chrome-zip-for-dist",
+    "build:webextension": "webpack --config webpack.webextension.prod.js",
+    "build:safari": "webpack --config webpack.safari.js && gulp safari",
+    "dist:chrome": "webpack --config webpack.webextension.prod.js && gulp chrome-zip-for-dist",
     "dist:firefox": "web-ext sign --source-dir ./build/webextension --artifacts-dir ./dist/firefox"
   },
   "repository": {
