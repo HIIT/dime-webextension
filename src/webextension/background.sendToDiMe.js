@@ -40,8 +40,8 @@ async function compile(document, url) {
     return {
       '@type': 'DesktopEvent',
       type: 'http://www.semanticdesktop.org/ontologies/2010/01/25/nuao/#UsageEvent',
-      actor: 'DiMe browser extension',
-      origin: `chrome-extension://${browser.runtime.id}`,
+      actor: 'DiMe Browser Extension',
+      origin: browser.runtime.id,
       start: Date.now(),
       targettedResource: {
         '@type': 'WebDocument',
@@ -72,8 +72,8 @@ browser.runtime.onMessage.addListener((request) => {
       const simplePageDataWithDimeStructure = {
         '@type': 'DesktopEvent',
         type: 'http://www.semanticdesktop.org/ontologies/2010/01/25/nuao/#UsageEvent',
-        actor: 'DiMe browser extension',
-        origin: `chrome-extension://${browser.runtime.id}`,
+        actor: 'DiMe Browser Extension',
+        origin: browser.runtime.id,
         start: Date.now(),
         targettedResource: {
           '@type': 'WebDocument',
