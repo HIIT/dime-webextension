@@ -9,7 +9,6 @@
     "http://*/*",
     "https://*/*",
     "webRequest",
-    "webRequestBlocking",
     "tabs",
     "storage"
   ],
@@ -20,7 +19,7 @@
     "256": "icon256.png"
   },
   "options_ui": {
-    "page": "dime.options.html",
+    "page": "options.html",
     "chrome_style": true
   },
   "browser_action": {
@@ -36,20 +35,28 @@
   "content_scripts": [
     {
       "matches": ["http://*/*", "https://*/*"],
-      "js": ["dime.content.js"],
+      "js": ["content.js"],
       "run_at": "document_end"
     }
   ],
   "background": {
       "scripts": [
-        "dime.background.js"
+        "background.storeSetDefaults.js",
+        "background.stateCheckers.js",
+        "background.UIActionsHandlers.js",
+        "background.UIStatesHandlers.js",
+        "background.getPureHTML.js",
+        "background.getArticle.js",
+        "background.getFrequentWords.js",
+        "background.getLinks.js",
+        "background.getMetaTags.js",
+        "background.tabsUpdateHandler.js",
+        "background.sendToDiMe.js"
       ],
       "persistent": true
   },
-  "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'",
   "web_accessible_resources": [
-    "dime.content.js",
-    "dime.logger.js"
+    "content.js"
   ],
   "gecko": {
     "strict_min_version": "48.0",
