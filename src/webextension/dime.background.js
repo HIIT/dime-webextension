@@ -60,7 +60,7 @@ browser.browserAction.onClicked.addListener(() => {
 
 let visitedURL = null;
 browser.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
-  if (changeInfo.status && changeInfo.status === 'complete' && tab.url) {
+  if (changeInfo.status && changeInfo.status === 'complete' && tab.url && tab.url !== 'chrome://newtab/') {
     if (tab.url === visitedURL) {
       // console.log('a duplicated url: ' +  visitedURL)
     } else {
