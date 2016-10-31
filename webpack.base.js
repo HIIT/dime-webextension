@@ -1,15 +1,12 @@
-const CopyWebpackPlugin = require('copy-webpack-plugin');
+/**
+ * COMMON WEBPACK CONFIGURATION
+ */
 
-module.exports = {
-  entry: {
-    'dime.content': './src/webextension/dime.content.js',
-    'dime.background': './src/webextension/dime.background.js',
-    'dime.options': './src/webextension/dime.options.js',
-  },
-  output: {
-    path: `${__dirname}/build/webextension`,
-    filename: '[name].js',
-  },
+const webpack = require('webpack');
+
+module.exports = options => ({
+  entry: options.entry,
+  output: options.output, // Merge with env dependent settings
   node: {
     net: 'empty',
     tls: 'empty',
@@ -17,7 +14,6 @@ module.exports = {
     child_process: 'empty',
     dns: 'empty',
   },
-  devtool: 'inline-source-map',
   module: {
     exprContextRegExp: /$^/,
     exprContextCritical: false,
@@ -56,22 +52,18 @@ module.exports = {
   resolve: {
     extensions: ['', '.js', '.jsx', '.json'],
   },
-  plugins: [
-    new CopyWebpackPlugin([
-      {
-        from: './src/webextension/manifest.json',
-        to: 'manifest.json',
+  plugins: options.plugins.concat([
+    // Always expose NODE_ENV to webpack, in order to use `process.env.NODE_ENV`
+    // inside your code for any environment checks; UglifyJS will automatically
+    // drop any unreachable code.
+    new webpack.DefinePlugin({
+      'process.env': {
+        NODE_ENV: JSON.stringify(process.env.NODE_ENV),
       },
-      {
-        from: './src/webextension/dime.options.html',
-        to: 'dime.options.html',
-      },
-      {
-        from: 'src/icons',
-      },
-    ], {
-      ignore: [],
-      copyUnmodified: true,
     }),
-  ],
-};
+  ]),
+  devtool: options.devtool,
+  target: 'web', // Make web variables accessible to webpack, e.g. window
+  stats: false, // Don't show stats in the console
+  progress: true,
+});
