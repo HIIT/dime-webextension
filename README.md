@@ -28,9 +28,9 @@ Browser extension (Chrome, Firefox, Vivaldi, Opera, Microsoft Edge, and Safari) 
 
 1. Go to ``chrome://extensions/``, enable Developer mode, click ``Load unpacked extension...``, and point the path to ``./build/webextension``
 2. Edit files in ``./src/webextension``, webpack-dev-server will automatcally repack the extension.
-    * If you edit ``./src/webextension/dime.background`` or ``./src/webextension/dime.content``, it is ***necessary*** to manually 'Reload' the extension.
-3. To see console messages and errors from ``./src/webextension/dime.background``. Go to ``chrome://extensions/``, click ``Inspect views: background page``.
-4. Console messages and errors in ``dime.content`` will appear in normal console of browser.
+    * If you edit ``./src/webextension/background.*.js`` or ``./src/webextension/content.js``, it is ***necessary*** to manually 'Reload' the extension.
+3. To see console messages and errors from ``./src/webextension/background.*.js``. Go to ``chrome://extensions/``, click ``Inspect views: background page``.
+4. Console messages and errors in ``content.js``(the content sciprt) will appear in normal console of browser.
 
 ###### Load Unpacked Extensions in Firefox
 
@@ -70,7 +70,7 @@ The extension needs to be signed by Mozilla.  Quoting from the [Firefox document
 > Starting with Firefox 43 ... Extensions and multipackage installers that support Firefox need to be signed by Mozilla in order for them to be installable in release and beta versions of Firefox. ... Only Mozilla can sign your add-on so that Firefox will install it by default. Add-ons are signed by submitting them to AMO or using the API and passing either an automated or manual code review.
 
 1. The HIIT distributer has the offical API key (JWT issuer) and API secret (JWT secret).
-2. ``npm run build:webextension`` compile the source code.
-2. Build and sign the extension by ``npm run dist:firefox -- --api-key=[your-API-key] --api-secret=[your-API-secret]``.
-3. A .xpi file should appear in ``./dist/firefox``
-4. See more details on [MDN](https://developer.mozilla.org/en-US/Add-ons/WebExtensions/Getting_started_with_web-ext).
+2. ``npm run build:webextension`` to compile the source code.
+3. Build and sign the extension by ``npm run dist:firefox -- --api-key=[your-API-key] --api-secret=[your-API-secret]``.
+4. A .xpi file should appear in ``./dist/firefox``
+5. See more details on [MDN](https://developer.mozilla.org/en-US/Add-ons/WebExtensions/Getting_started_with_web-ext).
