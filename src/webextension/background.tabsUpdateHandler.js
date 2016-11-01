@@ -7,6 +7,7 @@ browser.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
 });
 
 async function initSendTabDataToContentScript(tabId, changeInfo, tab) {
+  browser.storage.local.set({ currentPageSaved: false });
   if (changeInfo.status && changeInfo.status === 'complete' && tab.url && tab.url !== 'chrome://newtab/') {
     const enable = await checkEnable();
     if (!enable) {
@@ -21,6 +22,5 @@ async function initSendTabDataToContentScript(tabId, changeInfo, tab) {
       return;
     }
     browser.tabs.sendMessage(tabId, tab);
-    browser.storage.local.set({ currentPageSaved: false });
   }
 }
