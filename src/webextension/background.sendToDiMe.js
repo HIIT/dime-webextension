@@ -27,16 +27,18 @@ async function compile(document, url) {
   const article = await backgroundPage.getArticle(document);
   if (article && article.content) {
     const plainTextContent = article.content.text().replace(/(\r\n|\n|\r)/gm, ' ');
-    const frequentTerms = await backgroundPage.getFrequentWords(plainTextContent, 100);
-    const pureHTML = await backgroundPage.getPureHTML(article.content.html());
+    const [frequentTerms, pureHTML, openGraphProtocol, metaTags] = await Promise.all([
+      backgroundPage.getFrequentWords(plainTextContent, 100),
+      backgroundPage.getPureHTML(article.content.html()),
+      backgroundPage.getOpenGraphProtocol(),
+      backgroundPage.getMetaTags(),
+    ]);
     let links;
     try {
       links = await backgroundPage.getLinks(pureHTML, url);
     } catch (err) {
       links = { images: [], hyperLinks: [] };
     }
-    const openGraphProtocol = await backgroundPage.getOpenGraphProtocol();
-    const metaTags = await backgroundPage.getMetaTags();
     return {
       '@type': 'DesktopEvent',
       type: 'http://www.semanticdesktop.org/ontologies/2010/01/25/nuao/#UsageEvent',
