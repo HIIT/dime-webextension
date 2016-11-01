@@ -4,7 +4,7 @@
   "manifest_version": 2,
   "description": "Logs your browsing history to DiMe",
   "homepage_url": "https://github.com/HIIT/dime-webextension",
-  "version": "0.41",
+  "version": "0.42",
   "permissions": [
     "http://*/*",
     "https://*/*",
