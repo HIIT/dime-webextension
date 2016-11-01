@@ -65,7 +65,7 @@ It is currently necessary to publish a signed extension on the Chrome Web Store.
 
 ##### Distribute as Firefox Add-on (.xpi)
 
-The extension needs to be signed by Mozilla.  Quoting from the [Firefox documentation](https://developer.mozilla.org/en-US/Add-ons/Distribution):
+The extension needs to be signed by Mozilla (But compared to Chrome extension, it is NOT necessary to publish on [Mozilla Add-Ons](https://addons.mozilla.org/zh-TW/firefox/).  Quoting from the [Firefox documentation](https://developer.mozilla.org/en-US/Add-ons/Distribution):
 
 > Starting with Firefox 43 ... Extensions and multipackage installers that support Firefox need to be signed by Mozilla in order for them to be installable in release and beta versions of Firefox. ... Only Mozilla can sign your add-on so that Firefox will install it by default. Add-ons are signed by submitting them to AMO or using the API and passing either an automated or manual code review.
 
