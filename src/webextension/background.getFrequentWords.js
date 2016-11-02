@@ -19,7 +19,7 @@ function getFrequentWords(content, numberOfWords) { // eslint-disable-line no-un
   });
 }
 
-function checkTextLength(text) {
+function logerThan50(text) {
   return text.length < 50;
 }
 
@@ -28,7 +28,7 @@ function getTextTokens(content) { // eslint-disable-line no-unused-vars
   const spaceReg = /\s+/g;
   const numberReg = /[0-9]/g;
   const pureContent = content.replace(punctuationReg, '').replace(numberReg, '').replace(spaceReg, ' ');
-  const tokens = treebank(pureContent).filter(checkTextLength);
+  const tokens = treebank(pureContent).filter(logerThan50).map(token => token.toLowerCase());
   return _.difference(tokens, stopWords.english);
 }
 
