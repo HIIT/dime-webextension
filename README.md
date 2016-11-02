@@ -70,7 +70,6 @@ The extension needs to be signed by Mozilla (But compared to Chrome extension, i
 > Starting with Firefox 43 ... Extensions and multipackage installers that support Firefox need to be signed by Mozilla in order for them to be installable in release and beta versions of Firefox. ... Only Mozilla can sign your add-on so that Firefox will install it by default. Add-ons are signed by submitting them to AMO or using the API and passing either an automated or manual code review.
 
 1. The HIIT distributer has the offical API key (JWT issuer) and API secret (JWT secret).
-2. ``npm run build:webextension`` to compile the source code.
-3. Build and sign the extension by ``npm run dist:firefox -- --api-key=[your-API-key] --api-secret=[your-API-secret]``.
-4. A .xpi file should appear in ``./dist/firefox``
-5. See more details on [MDN](https://developer.mozilla.org/en-US/Add-ons/WebExtensions/Getting_started_with_web-ext).
+2. Build and sign the extension by ``API_KEY=[your-API-key] API_SECRET=[your-API-secret] npm run dist:firefox``.
+3. A .xpi file should appear in ``./dist/firefox``.
+4. See more details on [MDN](https://developer.mozilla.org/en-US/Add-ons/WebExtensions/Getting_started_with_web-ext).
