@@ -39,6 +39,12 @@ async function compile(document, url) {
     } catch (err) {
       links = { images: [], hyperLinks: [] };
     }
+    const uri = url;
+    const HTML = pureHTML;
+    const abstract = article.excerpt;
+    const imgURLs = links.images;
+    const hyperLinks = links.hyperLinks;
+    const title = document.title;
     return {
       '@type': 'DesktopEvent',
       type: 'http://www.semanticdesktop.org/ontologies/2010/01/25/nuao/#UsageEvent',
@@ -47,18 +53,17 @@ async function compile(document, url) {
       start: Date.now(),
       targettedResource: {
         '@type': 'WebDocument',
-        title: document.title,
+        title,
         isStoredAs: 'http://www.semanticdesktop.org/ontologies/2007/03/22/nfo/#RemoteDataObject',
         type: 'http://www.semanticdesktop.org/ontologies/2007/03/22/nfo/#HtmlDocument',
         mimeType: 'text/html',
-        tags: frequentTerms.slice(0, 8).map(term => ({ '@type': 'Tag', text: term })),
         plainTextContent,
-        uri: url,
+        uri,
         frequentTerms,
-        HTML: pureHTML,
-        abstract: article.excerpt,
-        imgURLs: links.images,
-        hyperLinks: links.hyperLinks,
+        HTML,
+        abstract,
+        imgURLs,
+        hyperLinks,
         openGraphProtocol,
         metaTags,
       },
