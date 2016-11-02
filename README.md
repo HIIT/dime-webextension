@@ -58,10 +58,9 @@ It is currently necessary to publish a signed extension on the Chrome Web Store.
 
 1. The HIIT distributer has the offical ``key.pem`` file. If you want to distubute you could generate your own ``.pem`` (see <https://developer.chrome.com/extensions/packaging>
 2. Place ``key.pem ``in ``./src/certs/``. Note that the filename has to be ``key.pem``.
-3. (optional) Edit the version number in ``./src/webextension/manifest.json``.
-4. ``npm run dist:chrome``. The ``dime-chrome-extension.zip`` will show up in ``./dist/chrome``.
-5. Upload the ZIP file using the [Chrome Developer Dashboard](https://chrome.google.com/webstore/developer/dashboard).
-6. See more details on [Chrome Devloper](https://developer.chrome.com/extensions/packaging#upload) website.
+3. ``npm run dist:chrome``, the ``dime-chrome-extension.zip`` will show up in ``./dist/chrome``.
+4. Upload ``dime-chrome-extension.zip`` using the [Chrome Developer Dashboard](https://chrome.google.com/webstore/developer/dashboard).
+5. See more details on [Chrome Devloper](https://developer.chrome.com/extensions/packaging#upload) website.
 
 ##### Distribute as Firefox Add-on (.xpi)
 
