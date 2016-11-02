@@ -4,7 +4,7 @@
   "manifest_version": 2,
   "description": "Logs your browsing history to DiMe",
   "homepage_url": "https://github.com/HIIT/dime-webextension",
-  "version": "0.42",
+  "version": "0.43",
   "permissions": [
     "http://*/*",
     "https://*/*",
@@ -52,15 +52,15 @@
         "background.getMetaTags.js",
         "background.tabsUpdateHandler.js",
         "background.sendToDiMe.js"
-      ],
-      "persistent": true
+      ]
   },
   "web_accessible_resources": [
     "content.js"
   ],
-  "gecko": {
-    "strict_min_version": "48.0",
-    "update_url": "https://example.com/updates.json"
+  "applications": {
+    "gecko": {
+      "strict_min_version": "48.0"
+    }
   },
   "minimum_chrome_version": "33"
 }
