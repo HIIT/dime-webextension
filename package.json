@@ -4,9 +4,9 @@
   "main": "none",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "gulp clean:webextension && gulp clean:safari && concurrently \"npm run dev:webextension\" \"npm run dev:safari\"",
-    "dev:webextension": "webpack --config webpack.webextension.js --watch --colors",
-    "dev:safari": "webpack --config webpack.safari.js --watch --colors",
+    "start": "concurrently \"npm run dev:webextension\" \"npm run dev:safari\"",
+    "dev:webextension": "gulp clean:webextension && webpack --config webpack.webextension.js --watch --colors",
+    "dev:safari": "gulp clean:safari && webpack --config webpack.safari.js --watch --colors",
     "build": "npm run build:webextension && npm run build:safari",
     "build:webextension": "gulp clean:webextension && webpack --config webpack.webextension.prod.js",
     "build:safari": "gulp clean:safari && webpack --config webpack.safari.js && gulp safari",
